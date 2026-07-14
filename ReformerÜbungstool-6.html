@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reformer Übersicht</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+<style>
+  body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="padding: 24px; font-family: system-ui, sans-serif; color: #5C5646;">
+    Wird geladen … Falls diese Meldung stehen bleibt, wird eine Internetverbindung benötigt (lädt React und Tailwind nach) und die Datei muss über "Teilen → Öffnen in Safari" geöffnet werden, nicht über die Dateivorschau.
+  </div>
+</div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useEffect, useRef } = React;
+
+const LEVELS = [
+  { id: 1, label: "Level 1", color: "#4F8B5C" },
+  { id: 2, label: "Level 2", color: "#D9B44A" },
+  { id: 3, label: "Level 3", color: "#B5473A" },
+];
+
+const CRITERIA = [
+  "WSExt",
+  "WSFlex",
+  "WSRot",
+  "WSLatflex",
+  "Armkraft",
+  "Schultermobilität",
+  "Stützkraft",
+  "Schultergürtelorganisation",
+  "Bauchkraft",
+  "Beinachse",
+  "Beinkraft",
+  "dorsale Kette",
+  "Koordination und Gleichgewicht",
+  "Hüftmobilität",
+  "Brustkorbmobi",
+  "Rumpfkontrolle",
+  "Wirbelsäulenartikulation",
+];
+
+const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
+
+// ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
+const SEED_EXERCISES = [
+  { id: "backstroke", name: "Backstroke", level: 3, tags: ["WSFlex", "Bauchkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [2, 6], note: "Kombinierte Bein- und Rumpfbewegung" },
+  { id: "bridging--1783977130145", name: "Bridging", level: 1, tags: ["WSFlex", "Wirbelsäulenartikulation", "Beinkraft", "Beinachse", "Schultergürtelorganisation"], sequence: [1], note: "In Varianten auch Hüftmobi" },
+  { id: "climb-a-tree-:-short-box-s.-1784028708453", name: "Climb a tree : Short Box S.", level: 2, tags: ["Bauchkraft", "dorsale Kette", "Hüftmobilität", "WSExt", "WSFlex", "Wirbelsäulenartikulation", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "" },
+  { id: "coordination", name: "Coordination : supine Abdominal S.", level: 2, tags: ["WSFlex", "Armkraft", "Bauchkraft", "Koordination und Gleichgewicht", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [2, 6], note: "Koordination Arme und Beine bei stabilem Rumpf und Atmung!" },
+  { id: "elephant", name: "Elephant- Long Stretch series", level: 2, tags: ["WSFlex", "dorsale Kette", "Bauchkraft", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [3], note: "Hamstringdehnung, Schulterstabilität" },
+  { id: "feet-in-straps--1783977197471", name: "Feet in Straps", level: 1, tags: ["Hüftmobilität", "Rumpfkontrolle", "Beinkraft", "dorsale Kette"], sequence: [1], note: "" },
+  { id: "footwork", name: "Footwork", level: 1, tags: [], sequence: [], note: "Fußarbeit, Aufwärmen, Beinachse" },
+  { id: "forward-bend-:-standing-s.-1784031803694", name: "Forward Bend : Standing S.", level: 2, tags: ["WSFlex", "Hüftmobilität", "Koordination und Gleichgewicht", "Beinachse"], sequence: [7], note: "" },
+  { id: "front/back-split-:-standing-s.-1784031659098", name: "Front/Back Split : Standing S.", level: 2, tags: ["Koordination und Gleichgewicht", "Hüftmobilität", "Rumpfkontrolle", "Beinachse"], sequence: [7], note: "" },
+  { id: "inverted-v--long-stretch-series-1783978454746", name: "Inverted V -long Stretch series", level: 2, tags: [], sequence: [3], note: "" },
+  { id: "jumping-1784032010125", name: "Jumping", level: 3, tags: ["Beinachse", "Beinkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Bauchkraft"], sequence: [1], note: "Kardio(Variante)" },
+  { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt"], sequence: [3, 4, 5], note: "" },
+  { id: "kneestretches", name: "Knee Stretch Flex", level: 2, tags: ["WSFlex"], sequence: [3, 5], note: "Knieend, Rumpfstabilität unter Last" },
+  { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: [], sequence: [2, 5], note: "" },
+  { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: [], sequence: [5], note: "" },
+  { id: "long-box-series:-prone-shoulder-press-+extension-1783978730007", name: "Long Box series: prone shoulder Press +Extension", level: 1, tags: ["WSExt"], sequence: [3, 4], note: "" },
+  { id: "longstretch", name: "Long Stretch : Long Stretch S.", level: 2, tags: ["Stützkraft", "Armkraft", "Schultermobilität", "Bauchkraft"], sequence: [3], note: "Plank-Variante, Ganzkörperspannung" },
+  { id: "mermaid", name: "Mermaid (+Ext)", level: 1, tags: ["WSLatflex", "WSExt", "WSRot"], sequence: [4, 5, 6], note: "Seitliche Rumpfdehnung, Brustkorbmobilität, Schulterausrichtung" },
+  { id: "overhead", name: "Overhead", level: 2, tags: ["WSFlex"], sequence: [2], note: "Kombinierte Vor-/Rückbeuge, Übergang zur Rückenserie" },
+  { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: [], sequence: [3], note: "" },
+  { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 2, tags: [], sequence: [3], note: "" },
+  { id: "semicircle", name: "Semi-Circle", level: 2, tags: ["WSExt", "WSFlex"], sequence: [6], note: "Verbesserte Ws-beweglichkeit" },
+  { id: "shortboxtwist", name: "Short Box Twist", level: 2, tags: ["WSRot"], sequence: [5, 6], note: "Bauchkraft" },
+  { id: "shortspine", name: "Short Spine Massage", level: 3, tags: ["WSFlex", "WSRot"], sequence: [], note: "Komplexe Wirbelsäulenartikulation" },
+  { id: "sidesplits", name: "Side Splits : Standing S.", level: 1, tags: ["Koordination und Gleichgewicht", "Beinkraft", "Hüftmobilität", "Beinachse"], sequence: [7], note: "Frontale Ebene, Beinachsenkontrolle" },
+  { id: "sidebend-:-short-box-s.-1784028873450", name: "Sidebend : Short Box S.", level: 2, tags: ["WSLatflex", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
+  { id: "stomachmassageround", name: "Stomach Massage Round", level: 2, tags: ["WSFlex"], sequence: [5], note: "Sitzend, Langsitz, Körperwahrnehmung" },
+  { id: "stomachmassagetwist", name: "Stomach Massage Twist", level: 2, tags: ["WSRot"], sequence: [5], note: "Sitzend, Rotation der Wirbelsäule" },
+  { id: "supine-arm-series--1783977258245", name: "Supine Arm Series", level: 1, tags: [], sequence: [2], note: "" },
+  { id: "supine-reverse-abdominals--1784031214652", name: "Supine Reverse Abdominals", level: 2, tags: ["Bauchkraft", "WSFlex", "Hüftmobilität", "Rumpfkontrolle"], sequence: [2], note: "" },
+  { id: "teaser", name: "Teaser", level: 3, tags: ["WSFlex"], sequence: [5, 6], note: "Komplexe Flexion mit Balance" },
+  { id: "tendonstretch", name: "Tendon Stretch", level: 2, tags: [], sequence: [], note: "Wadenkraft, Gleichgewicht im Stand" },
+  { id: "testübung-1784028756373", name: "Testübung", level: 1, tags: ["WSExt", "WSFlex"], sequence: [1, 2, 3, 4, 5, 6, 7], note: "Nur für Programmtest" },
+  { id: "hundred", name: "The Hundred", level: 1, tags: ["WSFlex"], sequence: [], note: "Aufwärmen der Körpermitte, Atemrhythmus" },
+  { id: "twist:-short-box-s.-1784028958495", name: "Twist: Short Box S.", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
+];
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function arraysEqualAsSets(a, b) {
+  const aa = [...(a || [])].sort();
+  const bb = [...(b || [])].sort();
+  if (aa.length !== bb.length) return false;
+  return aa.every((v, i) => v === bb[i]);
+}
+
+function LevelDot({ level, size }) {
+  size = size || 10;
+  const l = LEVELS.find((x) => x.id === level);
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        width: size,
+        height: size,
+        borderRadius: 9999,
+        backgroundColor: l.color,
+        boxShadow: "0 0 0 2px rgba(0,0,0,0.06)",
+      }}
+    />
+  );
+}
+
+function PilatesReformerFilter() {
+  const STORAGE_KEY = "reformer-uebersicht-daten";
+  const fileInputRef = useRef(null);
+
+  const [exercises, setExercises] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : SEED_EXERCISES;
+    } catch (e) {
+      return SEED_EXERCISES;
+    }
+  });
+  const [activeLevels, setActiveLevels] = useState([]);
+  const [activeTags, setActiveTags] = useState([]);
+  const [activeSequence, setActiveSequence] = useState([]);
+  const [query, setQuery] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [draft, setDraft] = useState({ name: "", level: 1, tags: [], sequence: [], note: "" });
+
+  const [mode, setMode] = useState("browse");
+  const [practiceOrder, setPracticeOrder] = useState([]);
+  const [practiceIndex, setPracticeIndex] = useState(0);
+  const [practiceAnswer, setPracticeAnswer] = useState({ level: null, tags: [], sequence: [] });
+  const [practiceFinished, setPracticeFinished] = useState(false);
+
+  const [practice2Order, setPractice2Order] = useState([]);
+  const [practice2Index, setPractice2Index] = useState(0);
+  const [practice2Selected, setPractice2Selected] = useState([]);
+  const [practice2Finished, setPractice2Finished] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(exercises));
+    } catch (e) {
+      // Speicher voll oder nicht verfügbar - kein Abbruch nötig
+    }
+  }, [exercises]);
+
+  function exportData() {
+    const blob = new Blob([JSON.stringify(exercises, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "reformer-uebungen.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        if (Array.isArray(data)) {
+          setExercises(data);
+        } else {
+          alert("Diese Datei enthält keine gültige Übungsliste.");
+        }
+      } catch (err) {
+        alert("Die Datei konnte nicht gelesen werden. Ist es eine gültige JSON-Datei?");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  }
+
+  function resetToDefault() {
+    setShowResetConfirm(true);
+  }
+
+  function confirmReset() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      // Speicher nicht verfügbar - kein Abbruch nötig
+    }
+    setExercises(SEED_EXERCISES);
+    setShowResetConfirm(false);
+  }
+
+  function cancelReset() {
+    setShowResetConfirm(false);
+  }
+
+  function toggle(arr, setArr, value) {
+    setArr(arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]);
+  }
+
+  const filtered = useMemo(() => {
+    return exercises.filter((ex) => {
+      const levelOk = activeLevels.length === 0 || activeLevels.includes(ex.level);
+      const tagsOk = activeTags.length === 0 || activeTags.every((t) => ex.tags.includes(t));
+      const seqOk =
+        activeSequence.length === 0 || activeSequence.every((s) => (ex.sequence || []).includes(s));
+      const queryOk =
+        query.trim() === "" || ex.name.toLowerCase().includes(query.trim().toLowerCase());
+      return levelOk && tagsOk && seqOk && queryOk;
+    });
+  }, [exercises, activeLevels, activeTags, activeSequence, query]);
+
+  function saveExercise() {
+    if (!draft.name.trim()) return;
+    if (editingId) {
+      setExercises((prev) =>
+        prev.map((ex) =>
+          ex.id === editingId
+            ? {
+                ...ex,
+                name: draft.name.trim(),
+                level: draft.level,
+                tags: draft.tags,
+                sequence: draft.sequence,
+                note: draft.note.trim(),
+              }
+            : ex
+        )
+      );
+    } else {
+      setExercises((prev) => [
+        ...prev,
+        {
+          id: draft.name.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(),
+          name: draft.name.trim(),
+          level: draft.level,
+          tags: draft.tags,
+          sequence: draft.sequence,
+          note: draft.note.trim(),
+        },
+      ]);
+    }
+    closeForm();
+  }
+
+  function startEdit(ex) {
+    setDraft({
+      name: ex.name,
+      level: ex.level,
+      tags: [...ex.tags],
+      sequence: [...(ex.sequence || [])],
+      note: ex.note || "",
+    });
+    setEditingId(ex.id);
+    setShowForm(true);
+  }
+
+  function closeForm() {
+    setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
+    setEditingId(null);
+    setShowForm(false);
+  }
+
+  function removeExercise(id) {
+    setExercises((prev) => prev.filter((ex) => ex.id !== id));
+  }
+
+  function startPractice() {
+    setPracticeOrder(shuffleArray(exercises));
+    setPracticeIndex(0);
+    setPracticeAnswer({ level: null, tags: [], sequence: [] });
+    setPracticeFinished(false);
+    setMode("practice");
+  }
+
+  function exitPractice() {
+    setMode("browse");
+  }
+
+  const currentPracticeExercise = practiceOrder[practiceIndex];
+
+  const practicePercent = useMemo(() => {
+    if (!currentPracticeExercise) return 0;
+    const levelOk = practiceAnswer.level === currentPracticeExercise.level;
+    const tagsOk = arraysEqualAsSets(practiceAnswer.tags, currentPracticeExercise.tags);
+    const seqOk = arraysEqualAsSets(practiceAnswer.sequence, currentPracticeExercise.sequence || []);
+    const correctCount = [levelOk, tagsOk, seqOk].filter(Boolean).length;
+    return Math.round((correctCount / 3) * 100);
+  }, [practiceAnswer, currentPracticeExercise]);
+
+  function setPracticeLevel(l) {
+    setPracticeAnswer((a) => ({ ...a, level: l }));
+  }
+
+  function togglePracticeTag(t) {
+    setPracticeAnswer((a) => ({
+      ...a,
+      tags: a.tags.includes(t) ? a.tags.filter((v) => v !== t) : [...a.tags, t],
+    }));
+  }
+
+  function togglePracticeSequence(s) {
+    setPracticeAnswer((a) => ({
+      ...a,
+      sequence: a.sequence.includes(s) ? a.sequence.filter((v) => v !== s) : [...a.sequence, s],
+    }));
+  }
+
+  function nextPractice() {
+    if (practicePercent < 100) return;
+    if (practiceIndex + 1 < practiceOrder.length) {
+      setPracticeIndex((i) => i + 1);
+      setPracticeAnswer({ level: null, tags: [], sequence: [] });
+    } else {
+      setPracticeFinished(true);
+    }
+  }
+
+  function startPractice2() {
+    setPractice2Order(shuffleArray(CRITERIA));
+    setPractice2Index(0);
+    setPractice2Selected([]);
+    setPractice2Finished(false);
+    setMode("practice2");
+  }
+
+  function exitPractice2() {
+    setMode("browse");
+  }
+
+  const currentPractice2Criterion = practice2Order[practice2Index];
+
+  const practice2Percent = useMemo(() => {
+    if (!currentPractice2Criterion || exercises.length === 0) return 0;
+    let correctCount = 0;
+    exercises.forEach((ex) => {
+      const actual = ex.tags.includes(currentPractice2Criterion);
+      const selected = practice2Selected.includes(ex.id);
+      if (actual === selected) correctCount += 1;
+    });
+    return Math.round((correctCount / exercises.length) * 100);
+  }, [practice2Selected, currentPractice2Criterion, exercises]);
+
+  function togglePractice2Exercise(id) {
+    setPractice2Selected((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+    );
+  }
+
+  function nextPractice2() {
+    if (practice2Percent < 100) return;
+    if (practice2Index + 1 < practice2Order.length) {
+      setPractice2Index((i) => i + 1);
+      setPractice2Selected([]);
+    } else {
+      setPractice2Finished(true);
+    }
+  }
+
+  if (mode === "practice") {
+    return (
+      <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+        <div className="max-w-2xl mx-auto px-6 py-10">
+          <div className="mb-8 flex items-center justify-between">
+            <h1
+              className="text-3xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Übungsmodus
+            </h1>
+            <button
+              onClick={exitPractice}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Beenden
+            </button>
+          </div>
+
+          {practiceFinished || !currentPracticeExercise ? (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p className="text-lg mb-4" style={{ color: "#1F2A24" }}>
+                Geschafft! Du hast alle {practiceOrder.length} Übungen abgeschlossen.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={startPractice}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+                >
+                  Nochmal starten
+                </button>
+                <button
+                  onClick={exitPractice}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+                >
+                  Zur Übersicht
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4 text-sm" style={{ color: "#7A7568" }}>
+                Übung {practiceIndex + 1} von {practiceOrder.length}
+              </div>
+
+              <div
+                className="p-6 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl font-semibold" style={{ color: "#1F2A24" }}>
+                    {currentPracticeExercise.name}
+                  </span>
+                  <span className="text-sm font-semibold" style={{ color: practicePercent === 100 ? "#4F8B5C" : "#7A7568" }}>
+                    {practicePercent}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "8px",
+                    borderRadius: "9999px",
+                    backgroundColor: "#EFEDE7",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: practicePercent + "%",
+                      height: "100%",
+                      backgroundColor: practicePercent === 100 ? "#4F8B5C" : "#3E6E8E",
+                      transition: "width 0.2s ease",
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+                    Level
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {LEVELS.map((l) => {
+                      const active = practiceAnswer.level === l.id;
+                      return (
+                        <button
+                          key={l.id}
+                          onClick={() => setPracticeLevel(l.id)}
+                          className="flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors"
+                          style={{
+                            backgroundColor: active ? "#1F2A24" : "#FFFFFF",
+                            color: active ? "#EFEDE7" : "#1F2A24",
+                            border: "1px solid " + (active ? "#1F2A24" : "#D8D3C7"),
+                          }}
+                        >
+                          <LevelDot level={l.id} />
+                          {l.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+                    Kriterien
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {CRITERIA.map((c) => {
+                      const active = practiceAnswer.tags.includes(c);
+                      return (
+                        <button
+                          key={c}
+                          onClick={() => togglePracticeTag(c)}
+                          className="px-3 py-2 rounded-md text-sm transition-colors"
+                          style={{
+                            backgroundColor: active ? "#3E6E8E" : "#FFFFFF",
+                            color: active ? "#FFFFFF" : "#1F2A24",
+                            border: "1px solid " + (active ? "#3E6E8E" : "#D8D3C7"),
+                          }}
+                        >
+                          {c}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+                    Sequencing
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {SEQUENCING.map((s) => {
+                      const active = practiceAnswer.sequence.includes(s);
+                      return (
+                        <button
+                          key={s}
+                          onClick={() => togglePracticeSequence(s)}
+                          className="px-3 py-2 rounded-md transition-colors"
+                          style={{
+                            backgroundColor: active ? "#8A6D3F" : "#FFFFFF",
+                            color: active ? "#FFFFFF" : "#1F2A24",
+                            border: "1px solid " + (active ? "#8A6D3F" : "#D8D3C7"),
+                            fontSize: "1.75rem",
+                            fontWeight: 700,
+                          }}
+                        >
+                          {s}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={nextPractice}
+                disabled={practicePercent < 100}
+                className="w-full px-4 py-3 rounded-md text-sm font-semibold"
+                style={{
+                  backgroundColor: practicePercent === 100 ? "#1F2A24" : "#D8D3C7",
+                  color: practicePercent === 100 ? "#EFEDE7" : "#7A7568",
+                  cursor: practicePercent === 100 ? "pointer" : "not-allowed",
+                }}
+              >
+                {practicePercent === 100
+                  ? practiceIndex + 1 < practiceOrder.length
+                    ? "Weiter zur nächsten Übung"
+                    : "Abschließen"
+                  : "Noch nicht vollständig (" + practicePercent + "%)"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === "practice2") {
+    return (
+      <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="mb-8 flex items-center justify-between">
+            <h1
+              className="text-3xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Kriterien-Modus
+            </h1>
+            <button
+              onClick={exitPractice2}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Beenden
+            </button>
+          </div>
+
+          {practice2Finished || !currentPractice2Criterion ? (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p className="text-lg mb-4" style={{ color: "#1F2A24" }}>
+                Geschafft! Du hast alle {practice2Order.length} Kriterien durchgearbeitet.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={startPractice2}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+                >
+                  Nochmal starten
+                </button>
+                <button
+                  onClick={exitPractice2}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+                >
+                  Zur Übersicht
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4 text-sm" style={{ color: "#7A7568" }}>
+                Kriterium {practice2Index + 1} von {practice2Order.length}
+              </div>
+
+              <div
+                className="p-6 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl font-semibold" style={{ color: "#1F2A24" }}>
+                    {currentPractice2Criterion}
+                  </span>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ color: practice2Percent === 100 ? "#4F8B5C" : "#7A7568" }}
+                  >
+                    {practice2Percent}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "8px",
+                    borderRadius: "9999px",
+                    backgroundColor: "#EFEDE7",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: practice2Percent + "%",
+                      height: "100%",
+                      backgroundColor: practice2Percent === 100 ? "#4F8B5C" : "#3E6E8E",
+                      transition: "width 0.2s ease",
+                    }}
+                  />
+                </div>
+                <p className="text-sm mt-2" style={{ color: "#5C5646" }}>
+                  Wähle alle Übungen aus, auf die dieses Kriterium zutrifft.
+                </p>
+              </div>
+
+              <div
+                className="p-4 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <div className="flex gap-2 flex-wrap">
+                  {exercises.map((ex) => {
+                    const active = practice2Selected.includes(ex.id);
+                    return (
+                      <button
+                        key={ex.id}
+                        onClick={() => togglePractice2Exercise(ex.id)}
+                        className="px-3 py-2 rounded-md text-sm transition-colors"
+                        style={{
+                          backgroundColor: active ? "#3E6E8E" : "#FFFFFF",
+                          color: active ? "#FFFFFF" : "#1F2A24",
+                          border: "1px solid " + (active ? "#3E6E8E" : "#D8D3C7"),
+                        }}
+                      >
+                        {ex.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button
+                onClick={nextPractice2}
+                disabled={practice2Percent < 100}
+                className="w-full px-4 py-3 rounded-md text-sm font-semibold"
+                style={{
+                  backgroundColor: practice2Percent === 100 ? "#1F2A24" : "#D8D3C7",
+                  color: practice2Percent === 100 ? "#EFEDE7" : "#7A7568",
+                  cursor: practice2Percent === 100 ? "pointer" : "not-allowed",
+                }}
+              >
+                {practice2Percent === 100
+                  ? practice2Index + 1 < practice2Order.length
+                    ? "Weiter zum nächsten Kriterium"
+                    : "Abschließen"
+                  : "Noch nicht vollständig (" + practice2Percent + "%)"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <div className="mb-8 border-b pb-6" style={{ borderColor: "#D8D3C7" }}>
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <h1
+              className="text-4xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Reformer Übersicht
+            </h1>
+            <span className="text-sm" style={{ color: "#7A7568" }}>
+              {filtered.length} von {exercises.length} Übungen
+            </span>
+          </div>
+          <p className="mt-2 text-sm" style={{ color: "#5C5646" }}>
+            Farbe zeigt das Level · Kriterien filtern nach Bewegungsqualität
+          </p>
+        </div>
+
+        <div className="mb-8 space-y-4">
+          <div>
+            <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+              Level
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {LEVELS.map((l) => {
+                const active = activeLevels.includes(l.id);
+                return (
+                  <button
+                    key={l.id}
+                    onClick={() => toggle(activeLevels, setActiveLevels, l.id)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors"
+                    style={{
+                      backgroundColor: active ? "#1F2A24" : "#FFFFFF",
+                      color: active ? "#EFEDE7" : "#1F2A24",
+                      border: "1px solid " + (active ? "#1F2A24" : "#D8D3C7"),
+                    }}
+                  >
+                    <LevelDot level={l.id} />
+                    {l.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+              Kriterien
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {CRITERIA.map((c) => {
+                const active = activeTags.includes(c);
+                return (
+                  <button
+                    key={c}
+                    onClick={() => toggle(activeTags, setActiveTags, c)}
+                    className="px-3 py-2 rounded-md text-sm transition-colors"
+                    style={{
+                      backgroundColor: active ? "#3E6E8E" : "#FFFFFF",
+                      color: active ? "#FFFFFF" : "#1F2A24",
+                      border: "1px solid " + (active ? "#3E6E8E" : "#D8D3C7"),
+                    }}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+              Sequencing
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {SEQUENCING.map((s) => {
+                const active = activeSequence.includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => toggle(activeSequence, setActiveSequence, s)}
+                    className="px-3 py-2 rounded-md transition-colors"
+                    style={{
+                      backgroundColor: active ? "#8A6D3F" : "#FFFFFF",
+                      color: active ? "#FFFFFF" : "#1F2A24",
+                      border: "1px solid " + (active ? "#8A6D3F" : "#D8D3C7"),
+                      fontSize: "1.75rem",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-2 flex-wrap">
+            <div
+              className="flex items-center gap-2 px-3 py-2 rounded-md flex-1"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", maxWidth: "24rem" }}
+            >
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Übung suchen..."
+                className="w-full outline-none text-sm bg-transparent"
+                style={{ color: "#1F2A24" }}
+              />
+            </div>
+            <button
+              onClick={() => {
+                if (showForm) {
+                  closeForm();
+                } else {
+                  setEditingId(null);
+                  setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
+                  setShowForm(true);
+                }
+              }}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+            >
+              + Übung hinzufügen
+            </button>
+            <button
+              onClick={exportData}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Exportieren
+            </button>
+            <button
+              onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Importieren
+            </button>
+            <input
+              type="file"
+              accept="application/json"
+              ref={fileInputRef}
+              onChange={importData}
+              style={{ display: "none" }}
+            />
+            <button
+              onClick={resetToDefault}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#B5473A", border: "1px solid #D8D3C7" }}
+            >
+              Zurücksetzen
+            </button>
+            <button
+              onClick={startPractice}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+            >
+              Übungsmodus starten
+            </button>
+            <button
+              onClick={startPractice2}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+            >
+              Kriterien-Modus starten
+            </button>
+          </div>
+        </div>
+
+        {showResetConfirm && (
+          <div
+            className="mb-8 p-4 rounded-md flex items-center justify-between flex-wrap gap-3"
+            style={{ backgroundColor: "#FFFFFF", border: "1px solid #B5473A" }}
+          >
+            <span className="text-sm" style={{ color: "#1F2A24" }}>
+              Gespeicherter Stand wird gelöscht und durch die Übungen aus dem aktuellen Code ersetzt. Fortfahren?
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={confirmReset}
+                className="px-3 py-2 rounded-md text-sm"
+                style={{ backgroundColor: "#B5473A", color: "#FFFFFF" }}
+              >
+                Ja, zurücksetzen
+              </button>
+              <button
+                onClick={cancelReset}
+                className="px-3 py-2 rounded-md text-sm"
+                style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+              >
+                Abbrechen
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showForm && (
+          <div className="mb-8 p-4 rounded-md" style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}>
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-sm font-semibold" style={{ color: "#1F2A24" }}>
+                {editingId ? "Übung bearbeiten" : "Neue Übung"}
+              </span>
+              <button onClick={closeForm} style={{ color: "#7A7568" }}>
+                ✕
+              </button>
+            </div>
+            <div className="space-y-3">
+              <input
+                value={draft.name}
+                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                placeholder="Name der Übung"
+                className="w-full px-3 py-2 rounded text-sm outline-none"
+                style={{ border: "1px solid #D8D3C7" }}
+              />
+              <div className="flex gap-2 flex-wrap">
+                {LEVELS.map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => setDraft({ ...draft, level: l.id })}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded text-sm"
+                    style={{
+                      backgroundColor: draft.level === l.id ? "#1F2A24" : "#F2EFE9",
+                      color: draft.level === l.id ? "#EFEDE7" : "#1F2A24",
+                    }}
+                  >
+                    <LevelDot level={l.id} size={8} />
+                    {l.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {CRITERIA.map((c) => {
+                  const active = draft.tags.includes(c);
+                  return (
+                    <button
+                      key={c}
+                      onClick={() =>
+                        setDraft({
+                          ...draft,
+                          tags: active ? draft.tags.filter((t) => t !== c) : [...draft.tags, c],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded text-sm"
+                      style={{
+                        backgroundColor: active ? "#3E6E8E" : "#F2EFE9",
+                        color: active ? "#FFFFFF" : "#1F2A24",
+                      }}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {SEQUENCING.map((s) => {
+                  const active = draft.sequence.includes(s);
+                  return (
+                    <button
+                      key={s}
+                      onClick={() =>
+                        setDraft({
+                          ...draft,
+                          sequence: active ? draft.sequence.filter((v) => v !== s) : [...draft.sequence, s],
+                        })
+                      }
+                      className="px-3 py-1.5 rounded"
+                      style={{
+                        backgroundColor: active ? "#8A6D3F" : "#F2EFE9",
+                        color: active ? "#FFFFFF" : "#1F2A24",
+                        fontSize: "1.75rem",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {s}
+                    </button>
+                  );
+                })}
+              </div>
+              <input
+                value={draft.note}
+                onChange={(e) => setDraft({ ...draft, note: e.target.value })}
+                placeholder="Notiz (optional)"
+                className="w-full px-3 py-2 rounded text-sm outline-none"
+                style={{ border: "1px solid #D8D3C7" }}
+              />
+              <button
+                onClick={saveExercise}
+                className="px-4 py-2 rounded text-sm"
+                style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+              >
+                {editingId ? "Änderungen speichern" : "Speichern"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((ex) => (
+            <div
+              key={ex.id}
+              className="p-4 rounded-md relative"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <div style={{ position: "absolute", top: 8, right: 8, display: "flex", gap: "8px" }}>
+                <button
+                  onClick={() => startEdit(ex)}
+                  title="Übung bearbeiten"
+                  style={{
+                    color: "#3E6E8E",
+                    fontSize: "0.75rem",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  ✎
+                </button>
+                <button
+                  onClick={() => removeExercise(ex.id)}
+                  title="Übung entfernen"
+                  style={{
+                    color: "#B5473A",
+                    fontSize: "0.75rem",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="flex items-start justify-between mb-2 pr-8">
+                <span className="font-semibold" style={{ color: "#1F2A24" }}>
+                  {ex.name}
+                </span>
+                <div className="flex flex-col items-end gap-1">
+                  <div className="flex items-center gap-1.5">
+                    <LevelDot level={ex.level} />
+                    <span className="text-xs" style={{ color: "#7A7568" }}>
+                      L{ex.level}
+                    </span>
+                  </div>
+                  {(ex.sequence || []).length > 0 && (
+                    <div className="flex gap-1">
+                      {ex.sequence.map((s) => (
+                        <span
+                          key={"seq-" + s}
+                          style={{ color: "#8A6D3F", fontSize: "1.33rem", fontWeight: 700, lineHeight: 1 }}
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex gap-1.5 flex-wrap mb-2">
+                {ex.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs px-2 py-0.5 rounded"
+                    style={{ backgroundColor: "#EFEDE7", color: "#3E6E8E" }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+              {ex.note && (
+                <p className="text-sm" style={{ color: "#5C5646" }}>
+                  {ex.note}
+                </p>
+              )}
+            </div>
+          ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full text-center py-12" style={{ color: "#7A7568" }}>
+              Keine Übung passt zu dieser Kombination.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<PilatesReformerFilter />, document.getElementById("root"));
+</script>
+</body>
+</html>
