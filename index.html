@@ -154,6 +154,11 @@ function PilatesReformerFilter() {
   const [practice2Selected, setPractice2Selected] = useState([]);
   const [practice2Finished, setPractice2Finished] = useState(false);
 
+  const [practice3Order, setPractice3Order] = useState([]);
+  const [practice3Index, setPractice3Index] = useState(0);
+  const [practice3Selected, setPractice3Selected] = useState([]);
+  const [practice3Finished, setPractice3Finished] = useState(false);
+
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(exercises));
@@ -372,6 +377,47 @@ function PilatesReformerFilter() {
       setPractice2Selected([]);
     } else {
       setPractice2Finished(true);
+    }
+  }
+
+  function startPractice3() {
+    setPractice3Order(shuffleArray(SEQUENCING));
+    setPractice3Index(0);
+    setPractice3Selected([]);
+    setPractice3Finished(false);
+    setMode("practice3");
+  }
+
+  function exitPractice3() {
+    setMode("browse");
+  }
+
+  const currentPractice3Sequence = practice3Order[practice3Index];
+
+  const practice3Percent = useMemo(() => {
+    if (!currentPractice3Sequence || exercises.length === 0) return 0;
+    let correctCount = 0;
+    exercises.forEach((ex) => {
+      const actual = (ex.sequence || []).includes(currentPractice3Sequence);
+      const selected = practice3Selected.includes(ex.id);
+      if (actual === selected) correctCount += 1;
+    });
+    return Math.round((correctCount / exercises.length) * 100);
+  }, [practice3Selected, currentPractice3Sequence, exercises]);
+
+  function togglePractice3Exercise(id) {
+    setPractice3Selected((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+    );
+  }
+
+  function nextPractice3() {
+    if (practice3Percent < 100) return;
+    if (practice3Index + 1 < practice3Order.length) {
+      setPractice3Index((i) => i + 1);
+      setPractice3Selected([]);
+    } else {
+      setPractice3Finished(true);
     }
   }
 
@@ -698,6 +744,146 @@ function PilatesReformerFilter() {
     );
   }
 
+  if (mode === "practice3") {
+    return (
+      <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="mb-8 flex items-center justify-between">
+            <h1
+              className="text-3xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Sequenzierungsmodus
+            </h1>
+            <button
+              onClick={exitPractice3}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Beenden
+            </button>
+          </div>
+
+          {practice3Finished || !currentPractice3Sequence ? (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p className="text-lg mb-4" style={{ color: "#1F2A24" }}>
+                Geschafft! Du hast alle {practice3Order.length} Sequenzen durchgearbeitet.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={startPractice3}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+                >
+                  Nochmal starten
+                </button>
+                <button
+                  onClick={exitPractice3}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+                >
+                  Zur Übersicht
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4 text-sm" style={{ color: "#7A7568" }}>
+                Sequenz {practice3Index + 1} von {practice3Order.length}
+              </div>
+
+              <div
+                className="p-6 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span
+                    className="font-semibold"
+                    style={{ color: "#1F2A24", fontSize: "2rem" }}
+                  >
+                    {currentPractice3Sequence}
+                  </span>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ color: practice3Percent === 100 ? "#4F8B5C" : "#7A7568" }}
+                  >
+                    {practice3Percent}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "8px",
+                    borderRadius: "9999px",
+                    backgroundColor: "#EFEDE7",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: practice3Percent + "%",
+                      height: "100%",
+                      backgroundColor: practice3Percent === 100 ? "#4F8B5C" : "#3E6E8E",
+                      transition: "width 0.2s ease",
+                    }}
+                  />
+                </div>
+                <p className="text-sm mt-2" style={{ color: "#5C5646" }}>
+                  Wähle alle Übungen aus, die zu dieser Sequenznummer gehören.
+                </p>
+              </div>
+
+              <div
+                className="p-4 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <div className="flex gap-2 flex-wrap">
+                  {exercises.map((ex) => {
+                    const active = practice3Selected.includes(ex.id);
+                    return (
+                      <button
+                        key={ex.id}
+                        onClick={() => togglePractice3Exercise(ex.id)}
+                        className="px-3 py-2 rounded-md text-sm transition-colors"
+                        style={{
+                          backgroundColor: active ? "#8A6D3F" : "#FFFFFF",
+                          color: active ? "#FFFFFF" : "#1F2A24",
+                          border: "1px solid " + (active ? "#8A6D3F" : "#D8D3C7"),
+                        }}
+                      >
+                        {ex.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button
+                onClick={nextPractice3}
+                disabled={practice3Percent < 100}
+                className="w-full px-4 py-3 rounded-md text-sm font-semibold"
+                style={{
+                  backgroundColor: practice3Percent === 100 ? "#1F2A24" : "#D8D3C7",
+                  color: practice3Percent === 100 ? "#EFEDE7" : "#7A7568",
+                  cursor: practice3Percent === 100 ? "pointer" : "not-allowed",
+                }}
+              >
+                {practice3Percent === 100
+                  ? practice3Index + 1 < practice3Order.length
+                    ? "Weiter zur nächsten Sequenz"
+                    : "Abschließen"
+                  : "Noch nicht vollständig (" + practice3Percent + "%)"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
@@ -866,6 +1052,13 @@ function PilatesReformerFilter() {
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
               Kriterien-Modus starten
+            </button>
+            <button
+              onClick={startPractice3}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+            >
+              Sequenzierungsmodus starten
             </button>
           </div>
         </div>
