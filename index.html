@@ -55,10 +55,11 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "6.0";
+const APP_VERSION = "7.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
+  { id: "arabesque:-long-stretch-s.-1784121912137", name: "Arabesque: Long Stretch S.", level: 3, tags: ["Rumpfkontrolle", "Schultergürtelorganisation", "Stützkraft", "Hüftmobilität", "dorsale Kette", "Beinachse", "Beinkraft"], sequence: [3], note: "Hamstrings" },
   { id: "backstroke", name: "Backstroke", level: 3, tags: ["WSFlex", "Bauchkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [2, 6], note: "Kombinierte Bein- und Rumpfbewegung" },
   { id: "bridging--1783977130145", name: "Bridging", level: 1, tags: ["WSFlex", "Wirbelsäulenartikulation", "Beinkraft", "Beinachse", "Schultergürtelorganisation"], sequence: [1], note: "In Varianten auch Hüftmobi" },
   { id: "climb-a-tree-:-short-box-s.-1784028708453", name: "Climb a tree : Short Box S.", level: 2, tags: ["Bauchkraft", "dorsale Kette", "Hüftmobilität", "WSExt", "WSFlex", "Wirbelsäulenartikulation", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "" },
@@ -68,6 +69,8 @@ const SEED_EXERCISES = [
   { id: "footwork", name: "Footwork", level: 1, tags: [], sequence: [], note: "Fußarbeit, Aufwärmen, Beinachse" },
   { id: "forward-bend-:-standing-s.-1784031803694", name: "Forward Bend : Standing S.", level: 2, tags: ["WSFlex", "Hüftmobilität", "Koordination und Gleichgewicht", "Beinachse"], sequence: [7], note: "" },
   { id: "front/back-split-:-standing-s.-1784031659098", name: "Front/Back Split : Standing S.", level: 2, tags: ["Koordination und Gleichgewicht", "Hüftmobilität", "Rumpfkontrolle", "Beinachse"], sequence: [7], note: "" },
+  { id: "gymnast-1784123595840", name: "Gymnast", level: 3, tags: ["WSFlex", "Bauchkraft", "Schultergürtelorganisation", "Stützkraft", "Schultermobilität", "Armkraft", "Beinachse", "dorsale Kette", "Koordination und Gleichgewicht", "Rumpfkontrolle"], sequence: [3, 6], note: "" },
+  { id: "hundred", name: "Hundred : supine Abdominal S", level: 2, tags: ["WSFlex", "Bauchkraft", "Armkraft", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [2], note: "Atmung" },
   { id: "inverted-v--long-stretch-series-1783978454746", name: "Inverted V -long Stretch series", level: 2, tags: [], sequence: [3], note: "" },
   { id: "jumping-1784032010125", name: "Jumping", level: 3, tags: ["Beinachse", "Beinkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Bauchkraft"], sequence: [1], note: "Kardio(Variante)" },
   { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt"], sequence: [3, 4, 5], note: "" },
@@ -76,7 +79,9 @@ const SEED_EXERCISES = [
   { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: [], sequence: [5], note: "" },
   { id: "long-box-series:-prone-shoulder-press-+extension-1783978730007", name: "Long Box series: prone shoulder Press +Extension", level: 1, tags: ["WSExt"], sequence: [3, 4], note: "" },
   { id: "longstretch", name: "Long Stretch : Long Stretch S.", level: 2, tags: ["Stützkraft", "Armkraft", "Schultermobilität", "Bauchkraft"], sequence: [3], note: "Plank-Variante, Ganzkörperspannung" },
-  { id: "mermaid", name: "Mermaid (+Ext)", level: 1, tags: ["WSLatflex", "WSExt", "WSRot"], sequence: [4, 5, 6], note: "Seitliche Rumpfdehnung, Brustkorbmobilität, Schulterausrichtung" },
+  { id: "mermaid-1784122308252", name: "Mermaid", level: 1, tags: ["WSLatflex", "Rumpfkontrolle", "Hüftmobilität", "Schultergürtelorganisation", "Brustkorbmobi"], sequence: [5], note: "" },
+  { id: "mermaid", name: "Mermaid (+Ext)", level: 1, tags: ["WSLatflex", "WSExt", "WSRot", "Schultergürtelorganisation", "Hüftmobilität", "Brustkorbmobi", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "Seitliche Rumpfdehnung" },
+  { id: "mermaid-(+rot)-1784122430869", name: "Mermaid (+Rot)", level: 1, tags: ["WSLatflex", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle", "Brustkorbmobi", "WSRot"], sequence: [5, 6], note: "" },
   { id: "overhead", name: "Overhead", level: 2, tags: ["WSFlex"], sequence: [2], note: "Kombinierte Vor-/Rückbeuge, Übergang zur Rückenserie" },
   { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: [], sequence: [3], note: "" },
   { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 2, tags: [], sequence: [3], note: "" },
@@ -91,9 +96,8 @@ const SEED_EXERCISES = [
   { id: "supine-arm-series--1783977258245", name: "Supine Arm Series", level: 1, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle"], sequence: [2], note: "Als Cheerleading u.ä. auch Koordination" },
   { id: "supine-reverse-abdominals--1784031214652", name: "Supine Reverse Abdominals", level: 2, tags: ["Bauchkraft", "WSFlex", "Hüftmobilität", "Rumpfkontrolle"], sequence: [2], note: "" },
   { id: "teaser", name: "Teaser", level: 3, tags: ["WSFlex"], sequence: [5, 6], note: "Komplexe Flexion mit Balance" },
-  { id: "tendonstretch", name: "Tendon Stretch", level: 2, tags: [], sequence: [], note: "Wadenkraft, Gleichgewicht im Stand" },
+  { id: "tendonstretch", name: "Tendon Stretch", level: 3, tags: ["WSFlex", "Rumpfkontrolle", "Beinachse", "dorsale Kette", "Schultergürtelorganisation", "Stützkraft", "Schultermobilität", "Bauchkraft", "Koordination und Gleichgewicht"], sequence: [3, 6], note: "" },
   { id: "testübung-1784028756373", name: "Testübung", level: 1, tags: ["WSExt", "WSFlex"], sequence: [1, 2, 3, 4, 5, 6, 7], note: "Nur für Programmtest" },
-  { id: "hundred", name: "The Hundred", level: 1, tags: ["WSFlex"], sequence: [], note: "Aufwärmen der Körpermitte, Atemrhythmus" },
   { id: "twist:-short-box-s.-1784028958495", name: "Twist: Short Box S.", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
 ];
 
