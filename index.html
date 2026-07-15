@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
 <style>
   body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+  @media print {
+    body * { visibility: hidden; }
+    #print-table-area, #print-table-area * { visibility: visible; }
+    #print-table-area { position: absolute; left: 0; top: 0; width: 100%; border: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -982,6 +987,15 @@ function PilatesReformerFilter() {
             >
               Anwenden
             </button>
+            {showTable && (
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 rounded-md text-sm"
+                style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+              >
+                Als PDF exportieren
+              </button>
+            )}
           </div>
 
           {!appliedRowAxis && (
@@ -1004,6 +1018,7 @@ function PilatesReformerFilter() {
 
           {showTable && (
             <div
+              id="print-table-area"
               className="rounded-md"
               style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", overflowX: "auto" }}
             >
