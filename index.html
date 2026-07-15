@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "11.0";
+const APP_VERSION = "13.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -165,7 +165,6 @@ function PilatesReformerFilter() {
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const [tableRowAxis, setTableRowAxis] = useState("Level");
   const [tableColAxis, setTableColAxis] = useState("Sequencing");
@@ -255,10 +254,6 @@ function PilatesReformerFilter() {
   }
 
   function resetToDefault() {
-    setShowResetConfirm(true);
-  }
-
-  function confirmReset() {
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.setItem(VERSION_KEY, APP_VERSION);
@@ -267,11 +262,6 @@ function PilatesReformerFilter() {
     }
     setExercises(SEED_EXERCISES);
     setLoadedVersion(APP_VERSION);
-    setShowResetConfirm(false);
-  }
-
-  function cancelReset() {
-    setShowResetConfirm(false);
   }
 
   function toggle(arr, setArr, value) {
@@ -1129,29 +1119,44 @@ function PilatesReformerFilter() {
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-8 border-b pb-6" style={{ borderColor: "#D8D3C7" }}>
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <h1
-              className="tracking-tight"
-              style={{
-                color: "#1F2A24",
-                fontFamily: "Georgia, 'Times New Roman', serif",
-                fontWeight: 700,
-                fontSize: "clamp(1.35rem, 6vw, 2.25rem)",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Reformer Übungstool
-            </h1>
-            <span className="text-sm" style={{ color: "#7A7568" }}>
-              {filtered.length} von {exercises.length} Übungen
-            </span>
+        <div className="mb-8 border-b pb-6 flex items-end justify-between gap-4 flex-wrap" style={{ borderColor: "#D8D3C7" }}>
+          <div>
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <h1
+                className="tracking-tight"
+                style={{
+                  color: "#1F2A24",
+                  fontFamily: "Georgia, 'Times New Roman', serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.35rem, 6vw, 2.25rem)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Reformer Übungstool
+              </h1>
+              <span className="text-sm" style={{ color: "#7A7568" }}>
+                {filtered.length} von {exercises.length} Übungen
+              </span>
+            </div>
+            <p className="mt-1 text-xs" style={{ color: loadedVersion === APP_VERSION ? "#7A7568" : "#B5473A" }}>
+              Version {APP_VERSION}
+              {loadedVersion !== APP_VERSION &&
+                " · Geladener Stand ist Version " + loadedVersion + " – bitte \"Zurücksetzen\" klicken"}
+            </p>
           </div>
-          <p className="mt-1 text-xs" style={{ color: loadedVersion === APP_VERSION ? "#7A7568" : "#B5473A" }}>
-            Version {APP_VERSION}
-            {loadedVersion !== APP_VERSION &&
-              " · Geladener Stand ist Version " + loadedVersion + " – bitte \"Zurücksetzen\" klicken"}
-          </p>
+          <button
+            onClick={resetToDefault}
+            className="rounded-md"
+            style={{
+              backgroundColor: "#FFFFFF",
+              color: "#B5473A",
+              border: "1px solid #D8D3C7",
+              padding: "4px 8px",
+              fontSize: "0.7rem",
+            }}
+          >
+            Zurücksetzen
+          </button>
         </div>
 
         <div className="mb-8 space-y-4">
@@ -1319,33 +1324,6 @@ function PilatesReformerFilter() {
             </button>
           </div>
         </div>
-
-        {showResetConfirm && (
-          <div
-            className="mb-8 p-4 rounded-md flex items-center justify-between flex-wrap gap-3"
-            style={{ backgroundColor: "#FFFFFF", border: "1px solid #B5473A" }}
-          >
-            <span className="text-sm" style={{ color: "#1F2A24" }}>
-              Gespeicherter Stand wird gelöscht und durch die Übungen aus dem aktuellen Code ersetzt. Fortfahren?
-            </span>
-            <div className="flex gap-2">
-              <button
-                onClick={confirmReset}
-                className="px-3 py-2 rounded-md text-sm"
-                style={{ backgroundColor: "#B5473A", color: "#FFFFFF" }}
-              >
-                Ja, zurücksetzen
-              </button>
-              <button
-                onClick={cancelReset}
-                className="px-3 py-2 rounded-md text-sm"
-                style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-              >
-                Abbrechen
-              </button>
-            </div>
-          </div>
-        )}
 
         {showForm && (
           <div className="mb-8 p-4 rounded-md" style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}>
