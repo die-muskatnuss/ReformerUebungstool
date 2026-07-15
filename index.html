@@ -78,9 +78,10 @@ const SEED_EXERCISES = [
   { id: "shortspine", name: "Short Spine Massage", level: 3, tags: ["WSFlex", "WSRot"], sequence: [], note: "Komplexe Wirbelsäulenartikulation" },
   { id: "sidesplits", name: "Side Splits : Standing S.", level: 1, tags: ["Koordination und Gleichgewicht", "Beinkraft", "Hüftmobilität", "Beinachse"], sequence: [7], note: "Frontale Ebene, Beinachsenkontrolle" },
   { id: "sidebend-:-short-box-s.-1784028873450", name: "Sidebend : Short Box S.", level: 2, tags: ["WSLatflex", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
+  { id: "snake-1784096118478", name: "Snake", level: 3, tags: ["WSExt", "Stützkraft", "Armkraft", "Schultergürtelorganisation", "dorsale Kette", "Rumpfkontrolle", "Bauchkraft"], sequence: [3, 4, 6], note: "" },
   { id: "stomachmassageround", name: "Stomach Massage Round", level: 2, tags: ["WSFlex"], sequence: [5], note: "Sitzend, Langsitz, Körperwahrnehmung" },
   { id: "stomachmassagetwist", name: "Stomach Massage Twist", level: 2, tags: ["WSRot"], sequence: [5], note: "Sitzend, Rotation der Wirbelsäule" },
-  { id: "supine-arm-series--1783977258245", name: "Supine Arm Series", level: 1, tags: [], sequence: [2], note: "" },
+  { id: "supine-arm-series--1783977258245", name: "Supine Arm Series", level: 1, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle"], sequence: [2], note: "Als Cheerleading u.ä. auch Koordination" },
   { id: "supine-reverse-abdominals--1784031214652", name: "Supine Reverse Abdominals", level: 2, tags: ["Bauchkraft", "WSFlex", "Hüftmobilität", "Rumpfkontrolle"], sequence: [2], note: "" },
   { id: "teaser", name: "Teaser", level: 3, tags: ["WSFlex"], sequence: [5, 6], note: "Komplexe Flexion mit Balance" },
   { id: "tendonstretch", name: "Tendon Stretch", level: 2, tags: [], sequence: [], note: "Wadenkraft, Gleichgewicht im Stand" },
@@ -226,7 +227,7 @@ function PilatesReformerFilter() {
       const levelOk = activeLevels.length === 0 || activeLevels.includes(ex.level);
       const tagsOk = activeTags.length === 0 || activeTags.every((t) => ex.tags.includes(t));
       const seqOk =
-        activeSequence.length === 0 || activeSequence.every((s) => (ex.sequence || []).includes(s));
+        activeSequence.length === 0 || activeSequence.some((s) => (ex.sequence || []).includes(s));
       const queryOk =
         query.trim() === "" || ex.name.toLowerCase().includes(query.trim().toLowerCase());
       return levelOk && tagsOk && seqOk && queryOk;
