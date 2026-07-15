@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "8.0";
+const APP_VERSION = "10.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -75,7 +75,7 @@ const SEED_EXERCISES = [
   { id: "jumping-1784032010125", name: "Jumping", level: 3, tags: ["Beinachse", "Beinkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Bauchkraft"], sequence: [1], note: "Kardio(Variante)" },
   { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt"], sequence: [3, 4, 5], note: "" },
   { id: "kneestretches", name: "Knee Stretch Flex", level: 2, tags: ["WSFlex"], sequence: [3, 5], note: "Knieend, Rumpfstabilität unter Last" },
-  { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: [], sequence: [2, 5], note: "" },
+  { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: [], sequence: [5, 3], note: "" },
   { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: [], sequence: [5], note: "" },
   { id: "long-box-series:-prone-shoulder-press-+extension-1783978730007", name: "Long Box series: prone shoulder Press +Extension", level: 1, tags: ["WSExt"], sequence: [3, 4], note: "" },
   { id: "longstretch", name: "Long Stretch : Long Stretch S.", level: 2, tags: ["Stützkraft", "Armkraft", "Schultermobilität", "Bauchkraft"], sequence: [3], note: "Plank-Variante, Ganzkörperspannung" },
@@ -1294,21 +1294,21 @@ function PilatesReformerFilter() {
               className="px-3 py-2 rounded-md text-sm"
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
-              Übungsmodus starten
+              Übungen lernen
             </button>
             <button
               onClick={startPractice2}
               className="px-3 py-2 rounded-md text-sm"
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
-              Kriterien-Modus starten
+              Kriterien lernen
             </button>
             <button
               onClick={startPractice3}
               className="px-3 py-2 rounded-md text-sm"
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
-              Sequenzierungsmodus starten
+              Sequenzierung lernen
             </button>
             <button
               onClick={() => setMode("table")}
