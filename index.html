@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "13.0";
+const APP_VERSION = "16.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -1119,7 +1119,7 @@ function PilatesReformerFilter() {
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-8 border-b pb-6 flex items-end justify-between gap-4 flex-wrap" style={{ borderColor: "#D8D3C7" }}>
+        <div className="mb-8 border-b pb-6 flex items-end gap-4 flex-wrap" style={{ borderColor: "#D8D3C7" }}>
           <div>
             <div className="flex items-baseline gap-3 flex-wrap">
               <h1
@@ -1153,6 +1153,7 @@ function PilatesReformerFilter() {
               border: "1px solid #D8D3C7",
               padding: "4px 8px",
               fontSize: "0.7rem",
+              marginLeft: "auto",
             }}
           >
             Zurücksetzen
@@ -1239,61 +1240,6 @@ function PilatesReformerFilter() {
           </div>
 
           <div className="flex items-center gap-3 pt-2 flex-wrap">
-            <div
-              className="flex items-center gap-2 px-3 py-2 rounded-md flex-1"
-              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", maxWidth: "24rem" }}
-            >
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Übung suchen..."
-                className="w-full outline-none text-sm bg-transparent"
-                style={{ color: "#1F2A24" }}
-              />
-            </div>
-            <button
-              onClick={() => {
-                if (showForm) {
-                  closeForm();
-                } else {
-                  setEditingId(null);
-                  setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
-                  setShowForm(true);
-                }
-              }}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
-            >
-              + Übung hinzufügen
-            </button>
-            <button
-              onClick={exportData}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-            >
-              Exportieren
-            </button>
-            <button
-              onClick={() => fileInputRef.current && fileInputRef.current.click()}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-            >
-              Importieren
-            </button>
-            <input
-              type="file"
-              accept="application/json"
-              ref={fileInputRef}
-              onChange={importData}
-              style={{ display: "none" }}
-            />
-            <button
-              onClick={resetToDefault}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#B5473A", border: "1px solid #D8D3C7" }}
-            >
-              Zurücksetzen
-            </button>
             <button
               onClick={startPractice}
               className="px-3 py-2 rounded-md text-sm"
@@ -1318,9 +1264,64 @@ function PilatesReformerFilter() {
             <button
               onClick={() => setMode("table")}
               className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
               Tabellenansicht
+            </button>
+            <button
+              onClick={exportData}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Exportieren
+            </button>
+            <button
+              onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Importieren
+            </button>
+            <input
+              type="file"
+              accept="application/json"
+              ref={fileInputRef}
+              onChange={importData}
+              style={{ display: "none" }}
+            />
+            <button
+              onClick={() => {
+                if (showForm) {
+                  closeForm();
+                } else {
+                  setEditingId(null);
+                  setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
+                  setShowForm(true);
+                }
+              }}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Übung hinzufügen
+            </button>
+            <div
+              className="flex items-center gap-2 px-3 py-2 rounded-md flex-1"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", maxWidth: "24rem" }}
+            >
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Übung suchen..."
+                className="w-full outline-none text-sm bg-transparent"
+                style={{ color: "#1F2A24" }}
+              />
+            </div>
+            <button
+              onClick={resetToDefault}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#B5473A", border: "1px solid #D8D3C7" }}
+            >
+              Zurücksetzen
             </button>
           </div>
         </div>
