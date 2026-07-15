@@ -142,6 +142,11 @@ function PilatesReformerFilter() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const [tableRowAxis, setTableRowAxis] = useState("Übungen");
+  const [tableColAxis, setTableColAxis] = useState("Level");
+  const [appliedRowAxis, setAppliedRowAxis] = useState(null);
+  const [appliedColAxis, setAppliedColAxis] = useState(null);
   const [draft, setDraft] = useState({ name: "", level: 1, tags: [], sequence: [], note: "" });
 
   const [mode, setMode] = useState("browse");
@@ -198,6 +203,31 @@ function PilatesReformerFilter() {
     };
     reader.readAsText(file);
     e.target.value = "";
+  }
+
+  function applyTable() {
+    setAppliedRowAxis(tableRowAxis);
+    setAppliedColAxis(tableColAxis);
+  }
+
+  function axisMatches(ex, axis, value) {
+    if (axis === "Level") return ex.level === value;
+    if (axis === "Sequencing") return (ex.sequence || []).includes(value);
+    return false;
+  }
+
+  function axisValues(axis) {
+    if (axis === "Level") return [1, 2, 3];
+    if (axis === "Sequencing") return SEQUENCING;
+    if (axis === "Übungen") return exercises;
+    return [];
+  }
+
+  function axisValueLabel(axis, value) {
+    if (axis === "Level") return "Level " + value;
+    if (axis === "Sequencing") return String(value);
+    if (axis === "Übungen") return value.name;
+    return "";
   }
 
   function resetToDefault() {
@@ -885,6 +915,184 @@ function PilatesReformerFilter() {
     );
   }
 
+  if (mode === "table") {
+    const showTable = appliedRowAxis && appliedColAxis && appliedRowAxis !== appliedColAxis;
+    const colValues = appliedColAxis ? axisValues(appliedColAxis) : [];
+    const rowValues = appliedRowAxis ? axisValues(appliedRowAxis) : [];
+
+    return (
+      <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+        <div className="max-w-5xl mx-auto px-6 py-10">
+          <div className="mb-8 flex items-center justify-between">
+            <h1
+              className="text-3xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Tabellenansicht
+            </h1>
+            <button
+              onClick={() => setMode("browse")}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Zurück
+            </button>
+          </div>
+          <p className="text-xs mb-6" style={{ color: "#7A7568" }}>
+            Noch in Arbeit
+          </p>
+
+          <div
+            className="p-4 rounded-md mb-6 flex items-end gap-4 flex-wrap"
+            style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+          >
+            <div>
+              <div className="text-xs uppercase tracking-widest mb-1" style={{ color: "#7A7568" }}>
+                Zeilen-Achse
+              </div>
+              <select
+                value={tableRowAxis}
+                onChange={(e) => setTableRowAxis(e.target.value)}
+                className="px-3 py-2 rounded-md text-sm"
+                style={{ border: "1px solid #D8D3C7", color: "#1F2A24", backgroundColor: "#FFFFFF" }}
+              >
+                <option value="Übungen">Übungen</option>
+                <option value="Level">Level</option>
+                <option value="Sequencing">Sequencing</option>
+              </select>
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-widest mb-1" style={{ color: "#7A7568" }}>
+                Spalten-Achse
+              </div>
+              <select
+                value={tableColAxis}
+                onChange={(e) => setTableColAxis(e.target.value)}
+                className="px-3 py-2 rounded-md text-sm"
+                style={{ border: "1px solid #D8D3C7", color: "#1F2A24", backgroundColor: "#FFFFFF" }}
+              >
+                <option value="Level">Level</option>
+                <option value="Sequencing">Sequencing</option>
+              </select>
+            </div>
+            <button
+              onClick={applyTable}
+              className="px-4 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+            >
+              Anwenden
+            </button>
+          </div>
+
+          {!appliedRowAxis && (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p style={{ color: "#7A7568" }}>Achsen wählen und auf "Anwenden" klicken.</p>
+            </div>
+          )}
+
+          {appliedRowAxis && !showTable && (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p style={{ color: "#7A7568" }}>Bitte zwei unterschiedliche Achsen wählen.</p>
+            </div>
+          )}
+
+          {showTable && (
+            <div
+              className="rounded-md"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", overflowX: "auto" }}
+            >
+              <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th
+                      style={{
+                        border: "1px solid #D8D3C7",
+                        padding: "8px 12px",
+                        backgroundColor: "#EFEDE7",
+                        color: "#7A7568",
+                        fontSize: "0.75rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        textAlign: "left",
+                      }}
+                    >
+                      {appliedRowAxis}
+                    </th>
+                    {colValues.map((cv, i) => (
+                      <th
+                        key={i}
+                        style={{
+                          border: "1px solid #D8D3C7",
+                          padding: "8px 12px",
+                          backgroundColor: "#EFEDE7",
+                          color: "#1F2A24",
+                          fontWeight: 700,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {axisValueLabel(appliedColAxis, cv)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rowValues.map((rv, ri) => (
+                    <tr key={ri}>
+                      <td
+                        style={{
+                          border: "1px solid #D8D3C7",
+                          padding: "8px 12px",
+                          fontWeight: 700,
+                          color: "#1F2A24",
+                          backgroundColor: "#EFEDE7",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {axisValueLabel(appliedRowAxis, rv)}
+                      </td>
+                      {colValues.map((cv, ci) => {
+                        let content;
+                        if (appliedRowAxis === "Übungen") {
+                          content = axisMatches(rv, appliedColAxis, cv) ? "✓" : "";
+                        } else {
+                          const matched = exercises.filter(
+                            (ex) =>
+                              axisMatches(ex, appliedRowAxis, rv) && axisMatches(ex, appliedColAxis, cv)
+                          );
+                          content = matched.map((ex) => ex.name).join(", ");
+                        }
+                        return (
+                          <td
+                            key={ci}
+                            style={{
+                              border: "1px solid #D8D3C7",
+                              padding: "8px 12px",
+                              color: "#1F2A24",
+                              fontSize: "0.875rem",
+                              textAlign: appliedRowAxis === "Übungen" ? "center" : "left",
+                            }}
+                          >
+                            {content}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
@@ -1060,6 +1268,13 @@ function PilatesReformerFilter() {
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
             >
               Sequenzierungsmodus starten
+            </button>
+            <button
+              onClick={() => setMode("table")}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Tabellenansicht
             </button>
           </div>
         </div>
