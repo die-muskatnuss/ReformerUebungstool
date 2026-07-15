@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reformer Übersicht</title>
+<title>Reformer Übungstool</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
@@ -54,6 +54,8 @@ const CRITERIA = [
 ];
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
+
+const APP_VERSION = "5.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -130,6 +132,7 @@ function LevelDot({ level, size }) {
 
 function PilatesReformerFilter() {
   const STORAGE_KEY = "reformer-uebersicht-daten";
+  const VERSION_KEY = "reformer-uebersicht-version";
   const fileInputRef = useRef(null);
 
   const [exercises, setExercises] = useState(() => {
@@ -138,6 +141,18 @@ function PilatesReformerFilter() {
       return saved ? JSON.parse(saved) : SEED_EXERCISES;
     } catch (e) {
       return SEED_EXERCISES;
+    }
+  });
+
+  const [loadedVersion, setLoadedVersion] = useState(() => {
+    try {
+      const savedVersion = localStorage.getItem(VERSION_KEY);
+      if (savedVersion) return savedVersion;
+      // Kein gespeicherter Stand vorhanden - das ist ein frischer Ladevorgang mit dem aktuellen Code
+      localStorage.setItem(VERSION_KEY, APP_VERSION);
+      return APP_VERSION;
+    } catch (e) {
+      return APP_VERSION;
     }
   });
   const [activeLevels, setActiveLevels] = useState([]);
@@ -242,10 +257,12 @@ function PilatesReformerFilter() {
   function confirmReset() {
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(VERSION_KEY, APP_VERSION);
     } catch (e) {
       // Speicher nicht verfügbar - kein Abbruch nötig
     }
     setExercises(SEED_EXERCISES);
+    setLoadedVersion(APP_VERSION);
     setShowResetConfirm(false);
   }
 
@@ -1114,17 +1131,25 @@ function PilatesReformerFilter() {
         <div className="mb-8 border-b pb-6" style={{ borderColor: "#D8D3C7" }}>
           <div className="flex items-baseline gap-3 flex-wrap">
             <h1
-              className="text-4xl tracking-tight"
-              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+              className="tracking-tight"
+              style={{
+                color: "#1F2A24",
+                fontFamily: "Georgia, 'Times New Roman', serif",
+                fontWeight: 700,
+                fontSize: "clamp(1.35rem, 6vw, 2.25rem)",
+                whiteSpace: "nowrap",
+              }}
             >
-              Reformer Übersicht
+              Reformer Übungstool
             </h1>
             <span className="text-sm" style={{ color: "#7A7568" }}>
               {filtered.length} von {exercises.length} Übungen
             </span>
           </div>
-          <p className="mt-2 text-sm" style={{ color: "#5C5646" }}>
-            Farbe zeigt das Level · Kriterien filtern nach Bewegungsqualität
+          <p className="mt-1 text-xs" style={{ color: loadedVersion === APP_VERSION ? "#7A7568" : "#B5473A" }}>
+            Version {APP_VERSION}
+            {loadedVersion !== APP_VERSION &&
+              " · Geladener Stand ist Version " + loadedVersion + " – bitte \"Zurücksetzen\" klicken"}
           </p>
         </div>
 
@@ -1157,7 +1182,7 @@ function PilatesReformerFilter() {
 
           <div>
             <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
-              Kriterien
+              Kriterien (filtern nach Bewegungsqualität)
             </div>
             <div className="flex gap-2 flex-wrap">
               {CRITERIA.map((c) => {
