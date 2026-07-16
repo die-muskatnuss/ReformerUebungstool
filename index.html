@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "30.0";
+const APP_VERSION = "0.31";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -115,6 +115,11 @@ function arraysEqualAsSets(a, b) {
   const bb = [...(b || [])].sort();
   if (aa.length !== bb.length) return false;
   return aa.every((v, i) => v === bb[i]);
+}
+
+function levelCardBackground(level) {
+  const l = LEVELS.find((x) => x.id === level);
+  return l ? l.color + "1F" : "#FFFFFF";
 }
 
 function LevelDot({ level, size }) {
@@ -1869,7 +1874,7 @@ function PilatesReformerFilter() {
             <div
               key={ex.id}
               className="p-4 rounded-md relative"
-              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              style={{ backgroundColor: levelCardBackground(ex.level), border: "1px solid #D8D3C7" }}
             >
               <div style={{ position: "absolute", top: 8, right: 8, display: "flex", gap: "8px" }}>
                 <button
