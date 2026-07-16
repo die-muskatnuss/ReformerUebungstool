@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "21.0";
+const APP_VERSION = "30.0";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -1553,48 +1553,123 @@ function PilatesReformerFilter() {
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-8 border-b pb-6 flex items-end gap-4 flex-wrap" style={{ borderColor: "#D8D3C7" }}>
-          <div>
-            <div className="flex items-baseline gap-3 flex-wrap">
-              <h1
-                className="tracking-tight"
-                style={{
-                  color: "#1F2A24",
-                  fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontWeight: 700,
-                  fontSize: "clamp(1.35rem, 6vw, 2.25rem)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Reformer Übungstool
-              </h1>
-              <span className="text-sm" style={{ color: "#7A7568" }}>
-                {filtered.length} von {exercises.length} Übungen
-              </span>
+        <div className="mb-8 border-b pb-6" style={{ borderColor: "#D8D3C7" }}>
+          <div style={{ position: "relative" }}>
+            <div style={{ paddingRight: "6rem" }}>
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <h1
+                  className="tracking-tight"
+                  style={{
+                    color: "#1F2A24",
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    fontWeight: 700,
+                    fontSize: "clamp(1.35rem, 6vw, 2.25rem)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Reformer Übungstool
+                </h1>
+                <span className="text-sm" style={{ color: "#7A7568" }}>
+                  {filtered.length} von {exercises.length} Übungen
+                  <span className="text-xs">, noch unvollständig</span>
+                </span>
+              </div>
+              <p className="mt-1 text-xs" style={{ color: loadedVersion === APP_VERSION ? "#7A7568" : "#B5473A" }}>
+                Version {APP_VERSION}
+                {loadedVersion !== APP_VERSION &&
+                  " · Geladener Stand ist Version " + loadedVersion + " – bitte \"Zurücksetzen\" klicken"}
+              </p>
             </div>
-            <p className="mt-1 text-xs" style={{ color: loadedVersion === APP_VERSION ? "#7A7568" : "#B5473A" }}>
-              Version {APP_VERSION}
-              {loadedVersion !== APP_VERSION &&
-                " · Geladener Stand ist Version " + loadedVersion + " – bitte \"Zurücksetzen\" klicken"}
-            </p>
+            <button
+              onClick={resetToDefault}
+              className="rounded-md"
+              style={{
+                backgroundColor: "#FFFFFF",
+                color: "#B5473A",
+                border: "1px solid #D8D3C7",
+                padding: "4px 8px",
+                fontSize: "0.7rem",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              }}
+            >
+              Zurücksetzen
+            </button>
           </div>
-          <button
-            onClick={resetToDefault}
-            className="rounded-md"
-            style={{
-              backgroundColor: "#FFFFFF",
-              color: "#B5473A",
-              border: "1px solid #D8D3C7",
-              padding: "4px 8px",
-              fontSize: "0.7rem",
-              marginLeft: "auto",
-            }}
-          >
-            Zurücksetzen
-          </button>
         </div>
 
         <div className="mb-8 space-y-4">
+          <div className="flex items-center gap-3 flex-wrap">
+            <select
+              value=""
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "exercises") setMode("practiceDifficulty");
+                else if (val === "criteria") startPractice2();
+                else if (val === "sequencing") startPractice3();
+                else if (val === "table") setMode("table");
+              }}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7", border: "1px solid #1F2A24", width: "6.5rem" }}
+            >
+              <option value="" disabled>
+                Lernen
+              </option>
+              <option value="exercises">Übungen lernen</option>
+              <option value="criteria">Kriterien lernen</option>
+              <option value="sequencing">Sequenzierung lernen</option>
+              <option value="table">Tabellenansicht</option>
+            </select>
+
+            <select
+              value=""
+              onChange={() => {}}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7", border: "1px solid #1F2A24", width: "6.5rem" }}
+            >
+              <option value="" disabled>
+                Planen
+              </option>
+            </select>
+
+            <select
+              value=""
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "export") exportData();
+                else if (val === "import") fileInputRef.current && fileInputRef.current.click();
+                else if (val === "add") {
+                  if (showForm) {
+                    closeForm();
+                  } else {
+                    setEditingId(null);
+                    setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
+                    setShowForm(true);
+                  }
+                } else if (val === "reset") resetToDefault();
+              }}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7", border: "1px solid #1F2A24", width: "6.5rem" }}
+            >
+              <option value="" disabled>
+                Edit
+              </option>
+              <option value="export">Exportieren</option>
+              <option value="import">Importieren</option>
+              <option value="add">Übung hinzufügen</option>
+              <option value="reset">Zurücksetzen</option>
+            </select>
+
+            <input
+              type="file"
+              accept="application/json"
+              ref={fileInputRef}
+              onChange={importData}
+              style={{ display: "none" }}
+            />
+          </div>
+
           <div>
             <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
               Level
@@ -1673,71 +1748,7 @@ function PilatesReformerFilter() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 pt-2 flex-wrap">
-            <button
-              onClick={() => setMode("practiceDifficulty")}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
-            >
-              Übungen lernen
-            </button>
-            <button
-              onClick={startPractice2}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
-            >
-              Kriterien lernen
-            </button>
-            <button
-              onClick={startPractice3}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
-            >
-              Sequenzierung lernen
-            </button>
-            <button
-              onClick={() => setMode("table")}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
-            >
-              Tabellenansicht
-            </button>
-            <button
-              onClick={exportData}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-            >
-              Exportieren
-            </button>
-            <button
-              onClick={() => fileInputRef.current && fileInputRef.current.click()}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-            >
-              Importieren
-            </button>
-            <input
-              type="file"
-              accept="application/json"
-              ref={fileInputRef}
-              onChange={importData}
-              style={{ display: "none" }}
-            />
-            <button
-              onClick={() => {
-                if (showForm) {
-                  closeForm();
-                } else {
-                  setEditingId(null);
-                  setDraft({ name: "", level: 1, tags: [], sequence: [], note: "" });
-                  setShowForm(true);
-                }
-              }}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
-            >
-              Übung hinzufügen
-            </button>
+          <div className="flex items-center gap-3 pt-3 flex-wrap">
             <div
               className="flex items-center gap-2 px-3 py-2 rounded-md flex-1"
               style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7", maxWidth: "24rem" }}
@@ -1750,13 +1761,6 @@ function PilatesReformerFilter() {
                 style={{ color: "#1F2A24" }}
               />
             </div>
-            <button
-              onClick={resetToDefault}
-              className="px-3 py-2 rounded-md text-sm"
-              style={{ backgroundColor: "#FFFFFF", color: "#B5473A", border: "1px solid #D8D3C7" }}
-            >
-              Zurücksetzen
-            </button>
           </div>
         </div>
 
