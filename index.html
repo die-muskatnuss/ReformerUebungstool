@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "0.34";
+const APP_VERSION = "0.38";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -78,16 +78,16 @@ const SEED_EXERCISES = [
   { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: ["Rumpfkontrolle", "Hüftmobilität", "Schultergürtelorganisation", "Stützkraft"], sequence: [3, 5], note: "" },
   { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: ["Koordination und Gleichgewicht", "Schultergürtelorganisation", "Armkraft", "Schultermobilität", "Rumpfkontrolle"], sequence: [5], note: "Verbesserte Hüftbeugerlänge" },
   { id: "long-box-series:-prone-shoulder-press-+extension-1783978730007", name: "Long Box series: prone shoulder Press +Extension", level: 1, tags: ["WSExt", "Rumpfkontrolle", "Stützkraft", "Schultergürtelorganisation", "Armkraft", "Schultermobilität", "dorsale Kette"], sequence: [3, 4], note: "Aktivität dorsale kette" },
+  { id: "long-spine-1784545351853", name: "Long spine", level: 2, tags: ["Wirbelsäulenartikulation", "Rumpfkontrolle", "Hüftmobilität", "dorsale Kette", "Schultergürtelorganisation", "WSFlex"], sequence: [1], note: "Rumpfkontrolle!" },
   { id: "longstretch", name: "Long Stretch : Long Stretch S.", level: 2, tags: ["Armkraft", "Schultermobilität", "Stützkraft", "Bauchkraft", "Rumpfkontrolle"], sequence: [3], note: "Plank-Variante, Ganzkörperspannung" },
   { id: "mermaid-1784122308252", name: "Mermaid", level: 1, tags: ["WSLatflex", "Rumpfkontrolle", "Hüftmobilität", "Schultergürtelorganisation", "Brustkorbmobi"], sequence: [5], note: "" },
   { id: "mermaid", name: "Mermaid (+Ext)", level: 1, tags: ["WSLatflex", "WSExt", "WSRot", "Schultergürtelorganisation", "Hüftmobilität", "Brustkorbmobi", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "Seitliche Rumpfdehnung" },
   { id: "mermaid-(+rot)-1784122430869", name: "Mermaid (+Rot)", level: 1, tags: ["WSLatflex", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle", "Brustkorbmobi", "WSRot"], sequence: [5, 6], note: "" },
   { id: "overhead", name: "Overhead : Supine Abdominal S.", level: 2, tags: ["WSFlex", "Schultergürtelorganisation", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Koordination und Gleichgewicht", "Armkraft", "Schultermobilität"], sequence: [2], note: "" },
   { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle", "Armkraft"], sequence: [3], note: "" },
-  { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 2, tags: [], sequence: [3], note: "" },
-  { id: "semicircle", name: "Semi-Circle", level: 2, tags: ["WSExt", "WSFlex"], sequence: [6], note: "Verbesserte Ws-beweglichkeit" },
-  { id: "shortboxtwist", name: "Short Box Twist", level: 2, tags: ["WSRot"], sequence: [5, 6], note: "Bauchkraft" },
-  { id: "shortspine", name: "Short Spine Massage", level: 3, tags: ["WSFlex", "WSRot"], sequence: [], note: "Komplexe Wirbelsäulenartikulation" },
+  { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 1, tags: ["Schultergürtelorganisation", "Stützkraft", "Bauchkraft", "Rumpfkontrolle", "Hüftmobilität", "Beinkraft", "Armkraft"], sequence: [3], note: "Schräg eher Level 2" },
+  { id: "semicircle", name: "Semi-Circle", level: 2, tags: ["WSExt", "WSFlex", "Hüftmobilität", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Beinachse", "Beinkraft", "Schultermobilität"], sequence: [6, 1, 4], note: "Regression = Bridging" },
+  { id: "shortspine", name: "Short Spine", level: 2, tags: ["WSFlex", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Schultergürtelorganisation", "dorsale Kette", "Hüftmobilität"], sequence: [1], note: "" },
   { id: "sidesplits", name: "Side Splits : Standing S.", level: 1, tags: ["Koordination und Gleichgewicht", "Beinkraft", "Hüftmobilität", "Beinachse"], sequence: [7], note: "Frontale Ebene, Beinachsenkontrolle" },
   { id: "sidebend-:-short-box-s.-1784028873450", name: "Sidebend : Short Box S.", level: 2, tags: ["WSLatflex", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
   { id: "snake-1784096118478", name: "Snake", level: 3, tags: ["WSExt", "Stützkraft", "Armkraft", "Schultergürtelorganisation", "dorsale Kette", "Rumpfkontrolle", "Bauchkraft"], sequence: [3, 4, 6], note: "" },
