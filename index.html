@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "0.39";
+const APP_VERSION = "0.40";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -76,6 +76,8 @@ const SEED_EXERCISES = [
   { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Hüftmobilität"], sequence: [3, 4, 5], note: "" },
   { id: "kneestretches", name: "Knee Stretch Flex", level: 2, tags: ["WSFlex", "Stützkraft", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle"], sequence: [3, 5], note: "Rumpfstabilität unter Last" },
   { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: ["Rumpfkontrolle", "Hüftmobilität", "Schultergürtelorganisation", "Stützkraft"], sequence: [3, 5], note: "" },
+  { id: "kneeling-arm-s.-:-facing-back-1785967544793", name: "Kneeling Arm S. : Facing Back", level: 1, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Koordination und Gleichgewicht", "Rumpfkontrolle"], sequence: [5], note: "Hüftbeugerlänge!" },
+  { id: "kneeling-arm-s.-:-facing-back-chest-expansion-1785967716477", name: "Kneeling Arm S. : Facing Back Chest Expansion", level: 1, tags: ["Brustkorbmobi", "WSRot", "Rumpfkontrolle", "Koordination und Gleichgewicht", "Schultergürtelorganisation", "Schultermobilität", "Armkraft"], sequence: [5], note: "" },
   { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: ["Koordination und Gleichgewicht", "Schultergürtelorganisation", "Armkraft", "Schultermobilität", "Rumpfkontrolle"], sequence: [5], note: "Verbesserte Hüftbeugerlänge" },
   { id: "long-box-series:-prone-shoulder-press-+extension-1783978730007", name: "Long Box series: prone shoulder Press +Extension", level: 1, tags: ["WSExt", "Rumpfkontrolle", "Stützkraft", "Schultergürtelorganisation", "Armkraft", "Schultermobilität", "dorsale Kette"], sequence: [3, 4], note: "Aktivität dorsale kette" },
   { id: "long-spine-1784545351853", name: "Long spine", level: 2, tags: ["Wirbelsäulenartikulation", "Rumpfkontrolle", "Hüftmobilität", "dorsale Kette", "Schultergürtelorganisation", "WSFlex"], sequence: [1], note: "Rumpfkontrolle!" },
@@ -86,11 +88,14 @@ const SEED_EXERCISES = [
   { id: "overhead", name: "Overhead : Supine Abdominal S.", level: 2, tags: ["WSFlex", "Schultergürtelorganisation", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Koordination und Gleichgewicht", "Armkraft", "Schultermobilität"], sequence: [2], note: "" },
   { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle", "Armkraft"], sequence: [3], note: "" },
   { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 1, tags: ["Schultergürtelorganisation", "Stützkraft", "Bauchkraft", "Rumpfkontrolle", "Hüftmobilität", "Beinkraft", "Armkraft"], sequence: [3], note: "Schräg eher Level 2" },
+  { id: "roll-down-s.-1785967950485", name: "Roll Down S.", level: 1, tags: ["Bauchkraft", "Wirbelsäulenartikulation", "Rumpfkontrolle", "Schultergürtelorganisation", "Armkraft", "WSFlex"], sequence: [], note: "Schräg= mit WsRot" },
+  { id: "scooter--1785968107560", name: "Scooter", level: 1, tags: ["Beinachse", "Beinkraft", "dorsale Kette", "Koordination und Gleichgewicht", "Hüftmobilität", "Rumpfkontrolle"], sequence: [7], note: "Variante: WsFlex" },
   { id: "semicircle", name: "Semi-Circle", level: 2, tags: ["WSExt", "WSFlex", "Hüftmobilität", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Beinachse", "Beinkraft", "Schultermobilität"], sequence: [6, 1, 4], note: "Regression = Bridging" },
   { id: "shortspine", name: "Short Spine", level: 2, tags: ["WSFlex", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Schultergürtelorganisation", "dorsale Kette", "Hüftmobilität"], sequence: [1], note: "" },
   { id: "sidesplits", name: "Side Splits : Standing S.", level: 1, tags: ["Koordination und Gleichgewicht", "Beinkraft", "Hüftmobilität", "Beinachse"], sequence: [7], note: "Frontale Ebene, Beinachsenkontrolle" },
   { id: "sidebend-:-short-box-s.-1784028873450", name: "Sidebend : Short Box S.", level: 2, tags: ["WSLatflex", "Schultergürtelorganisation", "Bauchkraft", "Brustkorbmobi", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5], note: "" },
   { id: "snake-1784096118478", name: "Snake", level: 3, tags: ["WSExt", "Stützkraft", "Armkraft", "Schultergürtelorganisation", "dorsale Kette", "Rumpfkontrolle", "Bauchkraft", "Koordination und Gleichgewicht"], sequence: [3, 4, 6], note: "" },
+  { id: "standing-hip-stretch--1785968315333", name: "Standing Hip Stretch", level: 1, tags: ["Schultergürtelorganisation", "Beinachse", "Beinkraft", "dorsale Kette", "Hüftmobilität", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [7, 6], note: "Variante: WsExt" },
   { id: "stomachmassageround", name: "Stomach Massage", level: 2, tags: ["WSFlex", "Schultergürtelorganisation", "Beinachse", "dorsale Kette", "Rumpfkontrolle"], sequence: [5], note: "Körperwahrnehmung im Langsitz" },
   { id: "stomachmassagetwist", name: "Stomach Massage Twist", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Beinachse", "dorsale Kette", "Rumpfkontrolle"], sequence: [5, 6], note: "Rotation der Wirbelsäule" },
   { id: "supine-arm-series--1783977258245", name: "Supine Arm Series", level: 1, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle"], sequence: [2], note: "Als Cheerleading u.ä. auch Koordination" },
@@ -98,7 +103,7 @@ const SEED_EXERCISES = [
   { id: "teaser", name: "Teaser", level: 3, tags: ["WSFlex", "WSExt", "Schultermobilität", "Schultergürtelorganisation", "Bauchkraft", "dorsale Kette", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5, 6, 2], note: "" },
   { id: "tendonstretch", name: "Tendon Stretch", level: 3, tags: ["WSFlex", "Rumpfkontrolle", "Beinachse", "dorsale Kette", "Schultergürtelorganisation", "Stützkraft", "Schultermobilität", "Bauchkraft", "Koordination und Gleichgewicht"], sequence: [3, 6], note: "" },
   { id: "testübung-1784028756373", name: "Testübung", level: 1, tags: ["WSExt", "WSFlex"], sequence: [1, 2, 3, 4, 5, 6, 7], note: "Nur für Programmtest" },
-  { id: "twist:-short-box-s.-1784028958495", name: "Twist: Short Box S.", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Bauchkraft"], sequence: [5, 6], note: "" },
+  { id: "twist:-short-box-s.-1784028958495", name: "Twist: Short Box S.", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Bauchkraft", "Schultermobilität", "Brustkorbmobi", "Rumpfkontrolle"], sequence: [5, 6], note: "" },
 ];
 
 function shuffleArray(arr) {
