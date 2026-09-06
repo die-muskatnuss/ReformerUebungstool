@@ -55,7 +55,7 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "0.40";
+const APP_VERSION = "0.41";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -65,6 +65,7 @@ const SEED_EXERCISES = [
   { id: "climb-a-tree-:-short-box-s.-1784028708453", name: "Climb a tree : Short Box S.", level: 2, tags: ["Bauchkraft", "dorsale Kette", "Hüftmobilität", "WSExt", "WSFlex", "Wirbelsäulenartikulation", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "" },
   { id: "coordination", name: "Coordination : supine Abdominal S.", level: 2, tags: ["WSFlex", "Armkraft", "Bauchkraft", "Koordination und Gleichgewicht", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [2, 6], note: "Koordination Arme und Beine bei stabilem Rumpf und Atmung!" },
   { id: "elephant", name: "Elephant- Long Stretch series", level: 2, tags: ["WSFlex", "dorsale Kette", "Bauchkraft", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [3], note: "Hamstringdehnung, Schulterstabilität" },
+  { id: "facing-side:-kneeling-arm-s.-1788726745686", name: "Facing Side: Kneeling Arm S.", level: 2, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [5], note: "Trizeps: +WSLat + Brustkorbmobi" },
   { id: "feet-in-straps--1783977197471", name: "Feet in Straps", level: 1, tags: ["Hüftmobilität", "Rumpfkontrolle", "Beinkraft", "dorsale Kette"], sequence: [1], note: "Koordination in Variante Peter Pan/Walking o t ceiling" },
   { id: "footwork", name: "Footwork", level: 1, tags: ["Beinachse", "Beinkraft", "Hüftmobilität", "Rumpfkontrolle"], sequence: [1], note: "Variationen anderer Focus!" },
   { id: "forward-bend-:-standing-s.-1784031803694", name: "Forward Bend : Standing S.", level: 2, tags: ["WSFlex", "Hüftmobilität", "Koordination und Gleichgewicht", "Beinachse", "Wirbelsäulenartikulation", "Rumpfkontrolle", "Beinkraft", "dorsale Kette"], sequence: [7, 6], note: "" },
@@ -72,6 +73,7 @@ const SEED_EXERCISES = [
   { id: "gymnast-1784123595840", name: "Gymnast", level: 3, tags: ["WSFlex", "Bauchkraft", "Schultergürtelorganisation", "Stützkraft", "Schultermobilität", "Armkraft", "Beinachse", "dorsale Kette", "Koordination und Gleichgewicht", "Rumpfkontrolle"], sequence: [3, 6], note: "" },
   { id: "hundred", name: "Hundred : supine Abdominal S", level: 2, tags: ["WSFlex", "Bauchkraft", "Armkraft", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [2], note: "Atmung" },
   { id: "inverted-v--long-stretch-series-1783978454746", name: "Inverted V -long Stretch series", level: 2, tags: ["Rumpfkontrolle", "Stützkraft", "Schultergürtelorganisation", "dorsale Kette", "Hüftmobilität"], sequence: [3], note: "" },
+  { id: "jackrabbit:-long-stretch-s.-1788726448971", name: "Jackrabbit: Long Stretch S.", level: 2, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "Beinkraft", "Hüftmobilität", "Rumpfkontrolle"], sequence: [3], note: "" },
   { id: "jumping-1784032010125", name: "Jumping", level: 3, tags: ["Beinachse", "Beinkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Bauchkraft"], sequence: [1], note: "Kardio(Variante)" },
   { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Hüftmobilität"], sequence: [3, 4, 5], note: "" },
   { id: "kneestretches", name: "Knee Stretch Flex", level: 2, tags: ["WSFlex", "Stützkraft", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle"], sequence: [3, 5], note: "Rumpfstabilität unter Last" },
@@ -86,6 +88,7 @@ const SEED_EXERCISES = [
   { id: "mermaid", name: "Mermaid (+Ext)", level: 1, tags: ["WSLatflex", "WSExt", "WSRot", "Schultergürtelorganisation", "Hüftmobilität", "Brustkorbmobi", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "Seitliche Rumpfdehnung" },
   { id: "mermaid-(+rot)-1784122430869", name: "Mermaid (+Rot)", level: 1, tags: ["WSLatflex", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle", "Brustkorbmobi", "WSRot"], sequence: [5, 6], note: "" },
   { id: "overhead", name: "Overhead : Supine Abdominal S.", level: 2, tags: ["WSFlex", "Schultergürtelorganisation", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Koordination und Gleichgewicht", "Armkraft", "Schultermobilität"], sequence: [2], note: "" },
+  { id: "pulling-straps:-long-box-s.-1788726119057", name: "Pulling Straps: Long Box S.", level: 2, tags: ["WSExt", "Armkraft", "Schultergürtelorganisation", "Schultermobilität", "Beinkraft", "dorsale Kette"], sequence: [4], note: "" },
   { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle", "Armkraft"], sequence: [3], note: "" },
   { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 1, tags: ["Schultergürtelorganisation", "Stützkraft", "Bauchkraft", "Rumpfkontrolle", "Hüftmobilität", "Beinkraft", "Armkraft"], sequence: [3], note: "Schräg eher Level 2" },
   { id: "roll-down-s.-1785967950485", name: "Roll Down S.", level: 1, tags: ["Bauchkraft", "Wirbelsäulenartikulation", "Rumpfkontrolle", "Schultergürtelorganisation", "Armkraft", "WSFlex"], sequence: [], note: "Schräg= mit WsRot" },
@@ -94,6 +97,7 @@ const SEED_EXERCISES = [
   { id: "shortspine", name: "Short Spine", level: 2, tags: ["WSFlex", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Schultergürtelorganisation", "dorsale Kette", "Hüftmobilität"], sequence: [1], note: "" },
   { id: "sidesplits", name: "Side Splits : Standing S.", level: 1, tags: ["Koordination und Gleichgewicht", "Beinkraft", "Hüftmobilität", "Beinachse"], sequence: [7], note: "Frontale Ebene, Beinachsenkontrolle" },
   { id: "sidebend-:-short-box-s.-1784028873450", name: "Sidebend : Short Box S.", level: 2, tags: ["WSLatflex", "Schultergürtelorganisation", "Bauchkraft", "Brustkorbmobi", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5], note: "" },
+  { id: "sitting-leg-press-1788727038411", name: "Sitting Leg press", level: 2, tags: ["Beinachse", "Beinkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle"], sequence: [5], note: "Variationen! Zbsp WSRot" },
   { id: "snake-1784096118478", name: "Snake", level: 3, tags: ["WSExt", "Stützkraft", "Armkraft", "Schultergürtelorganisation", "dorsale Kette", "Rumpfkontrolle", "Bauchkraft", "Koordination und Gleichgewicht"], sequence: [3, 4, 6], note: "" },
   { id: "standing-hip-stretch--1785968315333", name: "Standing Hip Stretch", level: 1, tags: ["Schultergürtelorganisation", "Beinachse", "Beinkraft", "dorsale Kette", "Hüftmobilität", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [7, 6], note: "Variante: WsExt" },
   { id: "stomachmassageround", name: "Stomach Massage", level: 2, tags: ["WSFlex", "Schultergürtelorganisation", "Beinachse", "dorsale Kette", "Rumpfkontrolle"], sequence: [5], note: "Körperwahrnehmung im Langsitz" },
