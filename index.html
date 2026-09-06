@@ -55,15 +55,18 @@ const CRITERIA = [
 
 const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
-const APP_VERSION = "0.41";
+const APP_VERSION = "0.43";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
   { id: "arabesque:-long-stretch-s.-1784121912137", name: "Arabesque: Long Stretch S.", level: 3, tags: ["Rumpfkontrolle", "Schultergürtelorganisation", "Stützkraft", "Hüftmobilität", "dorsale Kette", "Beinachse", "Beinkraft"], sequence: [3], note: "Hamstrings" },
+  { id: "around-the-world:-short-box-s.-1788729966723", name: "Around the World: Short Box S.", level: 3, tags: ["WSFlex", "WSRot", "WSLatflex", "Schultergürtelorganisation", "Bauchkraft", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5, 6], note: "In Variante: Hüftmobi" },
   { id: "backstroke", name: "Backstroke", level: 3, tags: ["WSFlex", "Bauchkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [2, 6], note: "Kombinierte Bein- und Rumpfbewegung" },
   { id: "bridging--1783977130145", name: "Bridging", level: 1, tags: ["WSFlex", "Wirbelsäulenartikulation", "Beinkraft", "Beinachse", "Schultergürtelorganisation"], sequence: [1], note: "In Varianten auch Hüftmobi" },
+  { id: "cleopatra-1788729692787", name: "Cleopatra", level: 3, tags: ["Brustkorbmobi", "WSLatflex", "Stützkraft", "Schultergürtelorganisation"], sequence: [5], note: "" },
   { id: "climb-a-tree-:-short-box-s.-1784028708453", name: "Climb a tree : Short Box S.", level: 2, tags: ["Bauchkraft", "dorsale Kette", "Hüftmobilität", "WSExt", "WSFlex", "Wirbelsäulenartikulation", "Rumpfkontrolle"], sequence: [4, 5, 6], note: "" },
   { id: "coordination", name: "Coordination : supine Abdominal S.", level: 2, tags: ["WSFlex", "Armkraft", "Bauchkraft", "Koordination und Gleichgewicht", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [2, 6], note: "Koordination Arme und Beine bei stabilem Rumpf und Atmung!" },
+  { id: "downstretch:-long-stretch-s.-1788728469205", name: "Downstretch: Long Stretch S.", level: 3, tags: ["WSExt", "Stützkraft", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle"], sequence: [3, 4], note: "Variante: WsRot + Brustkorbmobi" },
   { id: "elephant", name: "Elephant- Long Stretch series", level: 2, tags: ["WSFlex", "dorsale Kette", "Bauchkraft", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [3], note: "Hamstringdehnung, Schulterstabilität" },
   { id: "facing-side:-kneeling-arm-s.-1788726745686", name: "Facing Side: Kneeling Arm S.", level: 2, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Rumpfkontrolle", "Koordination und Gleichgewicht"], sequence: [5], note: "Trizeps: +WSLat + Brustkorbmobi" },
   { id: "feet-in-straps--1783977197471", name: "Feet in Straps", level: 1, tags: ["Hüftmobilität", "Rumpfkontrolle", "Beinkraft", "dorsale Kette"], sequence: [1], note: "Koordination in Variante Peter Pan/Walking o t ceiling" },
@@ -78,6 +81,7 @@ const SEED_EXERCISES = [
   { id: "knee-stretch-ext-1783978256848", name: "Knee Stretch Ext", level: 2, tags: ["WSExt", "Stützkraft", "Schultergürtelorganisation", "Rumpfkontrolle", "Hüftmobilität"], sequence: [3, 4, 5], note: "" },
   { id: "kneestretches", name: "Knee Stretch Flex", level: 2, tags: ["WSFlex", "Stützkraft", "Schultergürtelorganisation", "Hüftmobilität", "Rumpfkontrolle"], sequence: [3, 5], note: "Rumpfstabilität unter Last" },
   { id: "knee-stretch-neutral--1783978219477", name: "Knee Stretch neutral", level: 2, tags: ["Rumpfkontrolle", "Hüftmobilität", "Schultergürtelorganisation", "Stützkraft"], sequence: [3, 5], note: "" },
+  { id: "knee-stretches-knees-off-1788728155637", name: "Knee Stretches Knees off", level: 3, tags: ["Rumpfkontrolle", "Stützkraft", "WSFlex", "Beinkraft", "Hüftmobilität", "Schultergürtelorganisation", "Bauchkraft"], sequence: [3], note: "" },
   { id: "kneeling-arm-s.-:-facing-back-1785967544793", name: "Kneeling Arm S. : Facing Back", level: 1, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Koordination und Gleichgewicht", "Rumpfkontrolle"], sequence: [5], note: "Hüftbeugerlänge!" },
   { id: "kneeling-arm-s.-:-facing-back-chest-expansion-1785967716477", name: "Kneeling Arm S. : Facing Back Chest Expansion", level: 1, tags: ["Brustkorbmobi", "WSRot", "Rumpfkontrolle", "Koordination und Gleichgewicht", "Schultergürtelorganisation", "Schultermobilität", "Armkraft"], sequence: [5], note: "" },
   { id: "kneeling-arm-s.-facing-front-1783978772658", name: "Kneeling Arm S. Facing front", level: 1, tags: ["Koordination und Gleichgewicht", "Schultergürtelorganisation", "Armkraft", "Schultermobilität", "Rumpfkontrolle"], sequence: [5], note: "Verbesserte Hüftbeugerlänge" },
@@ -92,6 +96,10 @@ const SEED_EXERCISES = [
   { id: "quadruped-1783977941383", name: "Quadruped", level: 1, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "Rumpfkontrolle", "Armkraft"], sequence: [3], note: "" },
   { id: "reverse-abdominals-1783978650379", name: "Reverse Abdominals", level: 1, tags: ["Schultergürtelorganisation", "Stützkraft", "Bauchkraft", "Rumpfkontrolle", "Hüftmobilität", "Beinkraft", "Armkraft"], sequence: [3], note: "Schräg eher Level 2" },
   { id: "roll-down-s.-1785967950485", name: "Roll Down S.", level: 1, tags: ["Bauchkraft", "Wirbelsäulenartikulation", "Rumpfkontrolle", "Schultergürtelorganisation", "Armkraft", "WSFlex"], sequence: [], note: "Schräg= mit WsRot" },
+  { id: "rowing-1-1788729048017", name: "Rowing 1", level: 3, tags: ["WSFlex", "Armkraft", "Schultermobilität", "Schultergürtelorganisation", "dorsale Kette", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5, 6], note: "" },
+  { id: "rowing2-1788729160417", name: "Rowing2", level: 3, tags: ["WSFlex", "Armkraft", "Schultermobilität", "Schultergürtelorganisation", "dorsale Kette", "Koordination und Gleichgewicht", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5, 6], note: "" },
+  { id: "rowing3-1788729286906", name: "Rowing3", level: 3, tags: ["Armkraft", "Schultermobilität", "Schultergürtelorganisation", "Rumpfkontrolle"], sequence: [5], note: "" },
+  { id: "rowing4-1788729501726", name: "Rowing4", level: 3, tags: ["WSFlex", "Armkraft", "Schultermobilität", "Schultergürtelorganisation", "dorsale Kette", "Rumpfkontrolle", "Wirbelsäulenartikulation"], sequence: [5], note: "" },
   { id: "scooter--1785968107560", name: "Scooter", level: 1, tags: ["Beinachse", "Beinkraft", "dorsale Kette", "Koordination und Gleichgewicht", "Hüftmobilität", "Rumpfkontrolle"], sequence: [7], note: "Variante: WsFlex" },
   { id: "semicircle", name: "Semi-Circle", level: 2, tags: ["WSExt", "WSFlex", "Hüftmobilität", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Beinachse", "Beinkraft", "Schultermobilität"], sequence: [6, 1, 4], note: "Regression = Bridging" },
   { id: "shortspine", name: "Short Spine", level: 2, tags: ["WSFlex", "Rumpfkontrolle", "Wirbelsäulenartikulation", "Schultergürtelorganisation", "dorsale Kette", "Hüftmobilität"], sequence: [1], note: "" },
@@ -108,6 +116,7 @@ const SEED_EXERCISES = [
   { id: "tendonstretch", name: "Tendon Stretch", level: 3, tags: ["WSFlex", "Rumpfkontrolle", "Beinachse", "dorsale Kette", "Schultergürtelorganisation", "Stützkraft", "Schultermobilität", "Bauchkraft", "Koordination und Gleichgewicht"], sequence: [3, 6], note: "" },
   { id: "testübung-1784028756373", name: "Testübung", level: 1, tags: ["WSExt", "WSFlex"], sequence: [1, 2, 3, 4, 5, 6, 7], note: "Nur für Programmtest" },
   { id: "twist:-short-box-s.-1784028958495", name: "Twist: Short Box S.", level: 2, tags: ["WSRot", "Schultergürtelorganisation", "Bauchkraft", "Schultermobilität", "Brustkorbmobi", "Rumpfkontrolle"], sequence: [5, 6], note: "" },
+  { id: "upstretch:-long-stretch-s.-1788728773620", name: "Upstretch: Long Stretch S.", level: 3, tags: ["Stützkraft", "Schultergürtelorganisation", "Bauchkraft", "dorsale Kette", "Koordination und Gleichgewicht", "Hüftmobilität", "Rumpfkontrolle", "Wirbelsäulenartikulation", "WSFlex"], sequence: [3], note: "Sequenzing evt auch 6" },
 ];
 
 function shuffleArray(arr) {
