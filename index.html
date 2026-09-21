@@ -57,7 +57,7 @@ const SEQUENCING = [1, 2, 3, 4, 5, 6, 7];
 
 const SPRINGS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75];
 
-const APP_VERSION = "1.2";
+const APP_VERSION = "1.3";
 
 // ---- Hier stehen deine Übungen. Zeilen kopieren, anpassen, oder neue hinzufügen. ----
 const SEED_EXERCISES = [
@@ -237,6 +237,12 @@ function PilatesReformerFilter() {
   const [flashcardOrder, setFlashcardOrder] = useState([]);
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [flashcardFlipped, setFlashcardFlipped] = useState(false);
+
+  const [springOrder, setSpringOrder] = useState([]);
+  const [springIndex, setSpringIndex] = useState(0);
+  const [springSel, setSpringSel] = useState([]);
+  const [springAnchor, setSpringAnchor] = useState(null);
+  const [springFinished, setSpringFinished] = useState(false);
 
   const [practice2Order, setPractice2Order] = useState([]);
   const [practice2Index, setPractice2Index] = useState(0);
@@ -557,6 +563,63 @@ function PilatesReformerFilter() {
     if (flashcardIndex > 0) {
       setFlashcardIndex((i) => i - 1);
       setFlashcardFlipped(false);
+    }
+  }
+
+  function startSpringPractice() {
+    setSpringOrder(shuffleArray(exercises.filter((ex) => (ex.springs || []).length > 0)));
+    setSpringIndex(0);
+    setSpringSel([]);
+    setSpringAnchor(null);
+    setSpringFinished(false);
+    setMode("practiceSprings");
+  }
+
+  function exitSpringPractice() {
+    setMode("browse");
+  }
+
+  const currentSpringExercise = springOrder[springIndex];
+
+  const springCorrect =
+    !!currentSpringExercise &&
+    springSel.length > 0 &&
+    arraysEqualAsSets(springSel, currentSpringExercise.springs || []);
+
+  function clickSpring(v) {
+    if (springSel.length === 0) {
+      setSpringSel([v]);
+      setSpringAnchor(v);
+    } else if (springSel.length === 1 && springAnchor !== null) {
+      if (v === springAnchor) {
+        setSpringSel([]);
+        setSpringAnchor(null);
+      } else {
+        const lo = Math.min(v, springAnchor);
+        const hi = Math.max(v, springAnchor);
+        setSpringSel(SPRINGS.filter((s) => s >= lo && s <= hi));
+        setSpringAnchor(null);
+      }
+    } else {
+      setSpringSel([v]);
+      setSpringAnchor(v);
+    }
+  }
+
+  function revealSprings() {
+    if (!currentSpringExercise) return;
+    setSpringSel([...(currentSpringExercise.springs || [])]);
+    setSpringAnchor(null);
+  }
+
+  function nextSpring() {
+    if (!springCorrect) return;
+    if (springIndex + 1 < springOrder.length) {
+      setSpringIndex((i) => i + 1);
+      setSpringSel([]);
+      setSpringAnchor(null);
+    } else {
+      setSpringFinished(true);
     }
   }
 
@@ -1581,6 +1644,127 @@ function PilatesReformerFilter() {
     );
   }
 
+  if (mode === "practiceSprings") {
+    return (
+      <div className="min-h-screen w-full" style={{ backgroundColor: "#EFEDE7" }}>
+        <div className="max-w-2xl mx-auto px-6 py-10">
+          <div className="mb-6 flex items-center justify-between">
+            <h1
+              className="text-3xl tracking-tight"
+              style={{ color: "#1F2A24", fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700 }}
+            >
+              Federn lernen
+            </h1>
+            <button
+              onClick={exitSpringPractice}
+              className="px-3 py-2 rounded-md text-sm"
+              style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+            >
+              Beenden
+            </button>
+          </div>
+
+          {springFinished || !currentSpringExercise ? (
+            <div
+              className="p-8 rounded-md text-center"
+              style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+            >
+              <p className="text-lg mb-4" style={{ color: "#1F2A24" }}>
+                Geschafft! Du hast alle {springOrder.length} Übungen abgeschlossen.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={startSpringPractice}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#1F2A24", color: "#EFEDE7" }}
+                >
+                  Nochmal starten
+                </button>
+                <button
+                  onClick={exitSpringPractice}
+                  className="px-4 py-2 rounded text-sm"
+                  style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+                >
+                  Zur Übersicht
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4 text-sm" style={{ color: "#7A7568" }}>
+                Übung {springIndex + 1} von {springOrder.length}
+              </div>
+
+              <div
+                className="p-6 rounded-md mb-6"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid #D8D3C7" }}
+              >
+                <span className="text-2xl font-semibold" style={{ color: "#1F2A24" }}>
+                  {currentSpringExercise.name}
+                </span>
+              </div>
+
+              <div className="mb-6">
+                <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "#7A7568" }}>
+                  Federstärke{springSel.length > 0 && " · " + springRangeLabel(springSel)}
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  {SPRINGS.map((s) => {
+                    const active = springSel.includes(s);
+                    const isAnchor = springAnchor === s && springSel.length === 1;
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => clickSpring(s)}
+                        className="rounded-md transition-colors"
+                        style={{
+                          backgroundColor: active ? "#4F6E8B" : "#FFFFFF",
+                          color: active ? "#FFFFFF" : "#1F2A24",
+                          border: "1px solid " + (isAnchor ? "#1F2A24" : active ? "#4F6E8B" : "#D8D3C7"),
+                          fontWeight: 700,
+                          fontSize: "0.95rem",
+                          minWidth: "2.75rem",
+                          padding: "8px 6px",
+                        }}
+                      >
+                        {springLabel(s)}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs mt-2" style={{ color: "#7A7568" }}>
+                  Bereich: unteren und oberen Wert antippen. Erneut tippen startet eine neue Auswahl.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={revealSprings}
+                  className="flex-1 px-4 py-3 rounded-md text-sm font-semibold"
+                  style={{ backgroundColor: "#FFFFFF", color: "#1F2A24", border: "1px solid #D8D3C7" }}
+                >
+                  Aufdecken
+                </button>
+                <button
+                  onClick={nextSpring}
+                  disabled={!springCorrect}
+                  className="flex-1 px-4 py-3 rounded-md text-sm font-semibold"
+                  style={{
+                    backgroundColor: springCorrect ? "#4F8B5C" : "#D8D3C7",
+                    color: springCorrect ? "#FFFFFF" : "#7A7568",
+                    cursor: springCorrect ? "pointer" : "not-allowed",
+                  }}
+                >
+                  {springCorrect && springIndex + 1 >= springOrder.length ? "Abschließen" : "Weiter"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (mode === "table") {
     const showTable = appliedRowAxis && appliedColAxis && appliedRowAxis !== appliedColAxis;
     const colValues = appliedColAxis ? axisValues(appliedColAxis) : [];
@@ -1825,6 +2009,7 @@ function PilatesReformerFilter() {
                 else if (val === "sequencing") startPractice3();
                 else if (val === "table") setMode("table");
                 else if (val === "flashcards") startFlashcards();
+                else if (val === "springs") startSpringPractice();
               }}
               className="px-3 py-2 rounded-md text-sm"
               style={{ backgroundColor: "#1F2A24", color: "#EFEDE7", border: "1px solid #1F2A24", width: "6.5rem" }}
@@ -1836,6 +2021,7 @@ function PilatesReformerFilter() {
               <option value="exercises">Übungen lernen</option>
               <option value="criteria">Kriterien lernen</option>
               <option value="sequencing">Sequenzierung lernen</option>
+              <option value="springs">Federn lernen</option>
               <option value="table">Tabellenansicht</option>
             </select>
 
